@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Delivery Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+  }
+  
+  #game {
+      text-align: center;
+  }
+  
+  #office {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+  }
+  
+  .person {
+      width: 50px;
+      height: 50px;
+      background-color: lightblue;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+  
+  #coffee {
+      font-size: 30px;
+      cursor: pointer;
+      display: inline-block;
+  }
+  
+  #score {
+      margin-top: 20px;
+      font-size: 20px;
+  }</style>
+</head>
+<body>
+    <div id="game">
+        <h1>Coffee Delivery Game</h1>
+        <div id="office">
+            <div class="person" id="person1">P1</div>
+            <div class="person" id="person2">P2</div>
+            <div class="person" id="person3">P3</div>
+        </div>
+        <div id="coffee">☕</div>
+        <div id="score">Score: 0</div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="game.js"></script>
+    <script>$(document).ready(function() {
+      let score = 0;
+  
+      // Make coffee draggable
+      $('#coffee').draggable({
+          revert: true
+      });
+  
+      // Make people droppable
+      $('.person').droppable({
+          accept: '#coffee',
+          drop: function(event, ui) {
+              score++;
+              $('#score').text(`Score: ${score}`);
+              alert(`Delivered coffee to ${$(this).attr('id')}!`);
+          }
+      });
+  });</script>
+</body>
+</html>
