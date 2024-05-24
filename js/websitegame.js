@@ -1,10 +1,7 @@
 let level = 1;
 let salary = 0.1;
 let money = 0;
-let housePrice = 1000000;
-let timer;
-
-// Define an array of job names
+const housePrice = 1000000;
 const jobs = [
   "Deliver the coffees",
   "Print the papers",
@@ -12,11 +9,7 @@ const jobs = [
   "Organizing/Copying files",
   "Sitting in meetings and talking"
 ];
-
-// Define an array of money earned for each job
 const moneyEarnedPerJob = [50, 75, 100, 125, 150];
-
-// Define an array of goals with their values
 const goals = [
   { name: "Rent on apartment", value: 500 },
   { name: "Groceries", value: 100 },
@@ -25,84 +18,125 @@ const goals = [
   { name: "Electric bill", value: 75 }
 ];
 
-function startGame() {
-  showTutorial();
-}
+$(document).ready(function() {
+  $('#start-button').click(function() {
+    showTutorial();
+  });
+});
 
 function showTutorial() {
-document.getElementById('game').innerHTML = `
-<h2>Tutorial</h2>
-<p>Welcome to Corporate Climber!</p>
-<p>In this game, you will climb the corporate ladder by completing various tasks.</p>
-<p>Each task has a time limit. Complete tasks to earn money and advance to higher levels.</p>
-<p>If you fail a task, you'll lose money. If you run out of money, you're fired!</p>
-<p>Click the button below to start your journey!</p>
-<button onclick="startNextJob()">Start</button>
-`;
-displayGoals();
+  $('#game').html(`
+    <h2>Tutorial</h2>
+    <p>Welcome to Corporate Climber!</p>
+    <p>In this game, you will climb the corporate ladder by completing various tasks.</p>
+    <p>Each task has a time limit. Complete tasks to earn money and advance to higher levels.</p>
+    <p>If you fail a task, you'll lose money. If you run out of money, you're fired!</p>
+    <p>Click the button below to start your journey!</p>
+    <button id="start-job-button">Start</button>
+  `);
+  displayGoals();
+  $('#start-job-button').click(function() {
+    startNextJob();
+  });
 }
 
 function startNextJob() {
-let randomJobIndex = Math.floor(Math.random() * jobs.length);
-let jobName = jobs[randomJobIndex];
-let moneyEarned = moneyEarnedPerJob[randomJobIndex];
+  const randomJobIndex = Math.floor(Math.random() * jobs.length);
+  const jobName = jobs[randomJobIndex];
+  const moneyEarned = moneyEarnedPerJob[randomJobIndex];
 
-document.getElementById('game').innerHTML = `
-<h2>Job ${level}: ${jobName}</h2>
-<p>Money: $${money}</p>
-<p>Time left: <span id="timeLeft">10</span> seconds</p>
-<button onclick="completeTask(${moneyEarned})">Complete Task</button>
-`;
+  if (jobName === "Deliver the coffees") {
+    startCoffeeGame(moneyEarned);
+  } else {
+    $('#game').html(`
+      <h2>Job ${level}: ${jobName}</h2>
+      <p>Money: $${money}</p>
+      <p>Time left: <span id="timeLeft">10</span> seconds</p>
+      <button id="complete-task-button">Complete Task</button>
+    `);
 
-// Start timer animation
-timer = 10; // Adjust initial timer value here
-document.getElementById('progressBar').classList.add('progress-bar-animation');
+    $('#progressBar').css('width', '100%').stop().animate({ width: '0%' }, 10000);
 
-setTimeout(() => {
-gameOver();
-}, 10000);
+    setTimeout(() => {
+      gameOver();
+    }, 30000);
+
+    $('#complete-task-button').click(function() {
+      completeTask(moneyEarned);
+    });
+  }
+}
+
+function startCoffeeGame(moneyEarned) {
+  $('#game').hide();
+  $('#coffeeGame').show();
+
+  let coffeeCup = $('#coffeeCup');
+  let position = 0;
+  let deliveryInterval = setInterval(moveCoffeeCup, 100);
+
+  function moveCoffeeCup() {
+    if (position >= 300) {
+      clearInterval(deliveryInterval);
+      $('#complete-delivery-button').show();
+    } else {
+      position += 5;
+      coffeeCup.css('left', position + 'px');
+    }
+  }
+
+  $('#complete-delivery-button').click(function() {
+    clearInterval(deliveryInterval);
+    $('#coffeeGame').hide();
+    $('#game').show();
+    completeTask(moneyEarned);
+  });
 }
 
 function completeTask(moneyEarned) {
-  // Simulate completing task
-  let success = Math.random() < 0.5; // 50% chance of success
+  let success = Math.random() < 0.9; // 90% chance of success
   if (success) {
     money += moneyEarned;
     level++;
     salary *= 0.1;
     startNextJob();
   } else {
-    let moneyLost = salary * 50;
+    const moneyLost = salary * 50;
     money -= moneyLost;
-    document.getElementById('game').innerHTML = `
+    $('#game').html(`
       <h2>Failed!</h2>
       <p>Lost: $${moneyLost}</p>
       <p>Money: $${money}</p>
-      <button onclick="gameOver()">Quit</button>
-    `;
+      <button id="quit-button">Quit</button>
+    `);
+    $('#quit-button').click(function() {
+      gameOver();
+    });
   }
 }
 
 function displayGoals() {
-  const goalsList = document.getElementById('goals-list');
+  const goalsList = $('#goals-list');
+  goalsList.empty();
   goals.forEach(goal => {
-    const goalItem = document.createElement('li');
-    goalItem.textContent = `${goal.name}: $${goal.value}`;
-    goalsList.appendChild(goalItem);
+    goalsList.append(`<li>${goal.name}: $${goal.value}</li>`);
   });
 }
 
 function gameOver() {
   if (money >= housePrice) {
-    document.getElementById('game').innerHTML = `
+    $('#game').html(`
       <h2>Congratulations!</h2>
       <p>You've unlocked the house!</p>
-      <button onclick="location.reload()">Restart</button>
-    `;
+      <button id="restart-button">Restart</button>
+    `);
   } else {
-    document.getElementById('game').innerHTML = `
+    $('#game').html(`
       <h2>You're Fired!</h2>
-      <button onclick="location.reload()">Restart</button>
-    `;
+      <button id="restart-button">Restart</button>
+    `);
   }
+  $('#restart-button').click(function() {
+    location.reload();
+  });
 }

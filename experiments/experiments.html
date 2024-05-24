@@ -2,15 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Corporate Climber Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300&family=Poppins:wght@300&family=Questrial&family=Roboto:wght@300&family=Koulen&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/websitegame.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" src="./js/websitegame.js" defer></script>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
       background-image: url('img/officecubicle1.webp');
-      background-color: #dbdbdb;
+      background-color: #c3c3c3;
       background-size: cover;
       background-position: center;
       background-repeat: repeat;
@@ -34,6 +41,7 @@
       flex-basis: 200px;
       padding-left: 20px;
       border-left: 1px solid #d0d0d0;
+      cursor: pointer;
     }
     h1, h2, h3 {
       text-align: center;
@@ -72,183 +80,281 @@
       position: relative;
       transition: left 0.1s;
     }
+    @keyframes progressAnimation {
+      from {
+        width: 100%;
+      }
+      to {
+        width: 0;
+      }
+    }
+    .scrolling-text {
+      position: relative;
+      top: 100vh;
+      width: 100%;
+      text-align: center;
+      font-size: 2em;
+      font-family: 'Arial', cursive;
+      animation: scroll-text 60s linear;
+      z-index: 1000;
+    }
+    @keyframes scroll-text {
+      0% {
+        top: 70vh;
+      }
+      100% {
+        top: -8000vh;
+      }
+    }
+    .blur-effect {
+      filter: blur(5px);
+      pointer-events: none;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 999;
+      display: none;
+      pointer-events: none;
+    }
   </style>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-  <div class="container">
-    <div class="game-container">
-      <h1>Corporate Climber</h1>
-      <div id="game">
-        <button id="start-button">Start</button>
-      </div>
-      <div class="progress-bar-container">
-        <div class="progress-bar" id="progressBar"></div>
-      </div>
+
+<div class="container blur-effect" id="content">
+  <div class="game-container">
+    <h1>Corporate Climber</h1>
+    <div id="game">
+      <button id="start-button" disabled>Start</button>
     </div>
-    <div class="house-container">
-      <h2>Unlockable House</h2>
-      <p>Price: $1,000,000</p>
-      <img src="house_image.jpg" alt="House Image" width="150">
-      <h3>Goals</h3>
-      <ul id="goals-list">
-        <!-- Goals will be dynamically added here -->
-      </ul>
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
     </div>
   </div>
-
-  <div id="coffeeGame">
-    <h2>Deliver the Coffee</h2>
-    <p>Use arrow keys to move the coffee cup and deliver it on time!</p>
-    <div style="position: relative; width: 100%; height: 200px; background-color: #f0e68c;">
-      <img src="coffee_cup.png" id="coffeeCup" style="left: 0;">
-    </div>
-    <button id="complete-delivery-button" style="display: none;">Complete Delivery</button>
+  <div class="house-container" id="houseContainer">
+    <h2>Unlockable House</h2>
+    <p>Price: $500</p>
+    <img src="house_image.jpg" alt="House Image" width="150">
+    <h3>Goals</h3>
+    <ul id="goals-list">
+      <!-- Goals will be dynamically added here -->
+    </ul>
   </div>
+</div>
 
-  <script>
-    let level = 1;
-    let salary = 0.1;
-    let money = 0;
-    const housePrice = 1000000;
-    const jobs = [
-      "Deliver the coffees",
-      "Print the papers",
-      "Send a bunch of emails",
-      "Organizing/Copying files",
-      "Sitting in meetings and talking"
-    ];
-    const moneyEarnedPerJob = [50, 75, 100, 125, 150];
-    const goals = [
-      { name: "Rent on apartment", value: 500 },
-      { name: "Groceries", value: 100 },
-      { name: "Water bill", value: 50 },
-      { name: "Internet bill", value: 75 },
-      { name: "Electric bill", value: 75 }
-    ];
+<div id="coffeeGame">
+  <h2>Deliver the Coffee</h2>
+  <p>Use arrow keys to move the coffee cup and deliver it on time!</p>
+  <div style="position: relative; width: 100%; height: 200px; background-color: #f0e68c;">
+    <img src="coffee_cup.png" id="coffeeCup" style="left: 0;">
+  </div>
+  <button id="complete-delivery-button" style="display: none;">Complete Delivery</button>
+</div>
 
-    $(document).ready(function() {
-      $('#start-button').click(function() {
-        showTutorial();
-      });
+<div class="overlay" id="overlay"></div>
+
+<div class="scrolling-text" id="tutorial">
+  <h2>Tutorial</h2>
+  <p>Welcome to Corporate Climber!</p>
+  <p>Dear Player,<br>
+  On behalf of the entire team at [Company Name], it is with great enthusiasm and heartfelt pleasure that we extend to you our warmest welcome. We are truly delighted to have you join our esteemed organization and are confident that your expertise and unique perspective will be invaluable assets to our continued growth and success.</p>
+
+  <p>As you embark on this new chapter with us, please know that you are now a part of a dynamic, innovative, and collaborative environment where we are committed to fostering a culture of excellence, integrity, and mutual respect. We believe that your contributions will not only enhance our collective capabilities but also help in achieving our strategic goals and objectives.</p>
+
+  <p>We encourage you to take full advantage of the resources and opportunities available to you, and we look forward to supporting you in your professional development and career progression. Our dedicated team is here to assist you in any way possible as you acclimate to your new role and navigate through our organizational framework.</p>
+
+  <p>Once again, welcome to [Company Name]. We are excited to see the positive impact you will undoubtedly make and are eager to collaborate with you as we strive towards achieving our shared vision and mission.As you embark on your journey with [Company Name], it is incumbent upon us to provide you with comprehensive guidance and information essential for your seamless integration into our esteemed organization. We extend to you our warmest welcome and express our sincerest gratitude for choosing to join our dynamic team.</p>
+
+  <p>At [Company Name], we hold ourselves to the highest standards of conduct, ethics, and professionalism. In alignment with our unwavering commitment to excellence, we have outlined a set of rules and guidelines that govern our operations and interactions. We trust that you will familiarize yourself with these principles and uphold them with the utmost diligence and integrity.</p>
+
+  <p><b>Code of Conduct:</b> Our code of conduct serves as a blueprint for ethical behavior and guides every aspect of our operations. We expect all team members to conduct themselves with honesty, transparency, and respect towards colleagues, clients, and stakeholders.</p>
+
+  <p><b>Confidentiality Policy:</b> Safeguarding sensitive information is paramount to maintaining trust and credibility. As such, we strictly enforce our confidentiality policy to ensure the protection of proprietary data and client confidentiality.</p>
+
+  <p><b>Workplace Health and Safety:</b> The health and safety of our employees are of paramount importance. We are committed to providing a safe and healthy work environment and expect all team members to adhere to established safety protocols and procedures.</p>
+
+  <p><b>Diversity and Inclusion:</b> Embracing diversity and fostering an inclusive workplace culture are integral to our success. Discrimination of any form will not be tolerated, and we encourage open dialogue and mutual respect among all team members.</p>
+
+  <p>In addition to our company rules and guidelines, we recognize the significance of providing comprehensive insurance coverage to safeguard the well-being of our employees. Our insurance policy encompasses:</p>
+
+  <p><b>Health Insurance:</b> Our health insurance plan offers comprehensive coverage for medical expenses, ensuring that you and your dependents have access to quality healthcare services.</p>
+
+  <p><b>Life Insurance:</b> In the event of unforeseen circumstances, our life insurance policy provides financial protection to your loved ones, offering peace of mind and security for the future.</p>
+
+  <p><b>Disability Insurance:</b> Our disability insurance coverage serves as a safety net, offering financial support in the event of temporary or permanent disability, ensuring that you are adequately cared for during challenging times.</p>
+
+  <p>We encourage you to review the details of our insurance policy and familiarize yourself with the coverage and benefits available to you.</p>
+
+  <p>In conclusion, as you embark on this exciting journey with [Company Name], we urge you to embrace our core values, adhere to our rules and guidelines, and contribute to fostering a culture of excellence and collaboration. We are confident that your dedication, expertise, and commitment will contribute to our collective success.</p>
+
+  <p>Welcome aboard!</p>
+
+  <p>Warm regards,</p>
+
+  The Corporate Climber Game</p>
+</div>
+
+<script>
+  let level = 1;
+  let salary = 0.1;
+  let money = 0;
+  const housePrice = 500;
+  const jobs = [
+    "Deliver the coffees",
+    "Print the papers",
+    "Send a bunch of emails",
+    "Organizing/Copying files",
+    "Sitting in meetings and talking"
+  ];
+  const moneyEarnedPerJob = [50, 75, 100, 125, 150];
+  const goals = [
+    { name: "Rent on apartment", value: 500 },
+    { name: "Groceries", value: 100 },
+    { name: "Water bill", value: 50 },
+    { name: "Internet bill", value: 75 },
+    { name: "Electric bill", value: 75 }
+  ];
+  
+  $(document).ready(function() {
+    $('#start-button').click(function() {
+      startNextJob();
     });
-
-    function showTutorial() {
+    
+    $('#houseContainer').mousemove(function(event) {
+      adjustSpeed(event.clientY);
+    });
+    
+    showTutorial();
+  });
+  
+  function showTutorial() {
+    $('#overlay').show();
+    $('#tutorial').show();
+    displayGoals();
+    
+    setTimeout(() => {
+      $('#overlay').hide();
+      $('#start-button').prop('disabled', false);
+      $('#content').removeClass('blur-effect');
+    }, 5000); // Duration of the scrolling text animation
+    
+    $('#start-job-button').click(function() {
+      startNextJob();
+    });
+  }
+  
+  function adjustSpeed(mouseY) {
+    const speedFactor = Math.max(0.1, 1 - (mouseY / window.innerHeight));
+    document.querySelector('.scrolling-text').style.animationDuration = `${60 * speedFactor}s`;
+  }
+  
+  function startNextJob() {
+    const randomJobIndex = Math.floor(Math.random() * jobs.length);
+    const jobName = jobs[randomJobIndex];
+    const moneyEarned = moneyEarnedPerJob[randomJobIndex];
+  
+    if (jobName === "Deliver the coffees") {
+      startCoffeeGame(moneyEarned);
+    } else {
       $('#game').html(`
-        <h2>Tutorial</h2>
-        <p>Welcome to Corporate Climber!</p>
-        <p>In this game, you will climb the corporate ladder by completing various tasks.</p>
-        <p>Each task has a time limit. Complete tasks to earn money and advance to higher levels.</p>
-        <p>If you fail a task, you'll lose money. If you run out of money, you're fired!</p>
-        <p>Click the button below to start your journey!</p>
-        <button id="start-job-button">Start</button>
+        <h2>Job ${level}: ${jobName}</h2>
+        <p>Money: $${money}</p>
+        <p>Time left: <span id="timeLeft">10</span> seconds</p>
+        <button id="complete-task-button">Complete Task</button>
       `);
-      displayGoals();
-      $('#start-job-button').click(function() {
-        startNextJob();
-      });
-    }
-
-    function startNextJob() {
-      const randomJobIndex = Math.floor(Math.random() * jobs.length);
-      const jobName = jobs[randomJobIndex];
-      const moneyEarned = moneyEarnedPerJob[randomJobIndex];
-
-      if (jobName === "Deliver the coffees") {
-        startCoffeeGame(moneyEarned);
-      } else {
-        $('#game').html(`
-          <h2>Job ${level}: ${jobName}</h2>
-          <p>Money: $${money}</p>
-          <p>Time left: <span id="timeLeft">10</span> seconds</p>
-          <button id="complete-task-button">Complete Task</button>
-        `);
-
-        $('#progressBar').css('width', '100%').stop().animate({ width: '0%' }, 10000);
-
-        setTimeout(() => {
-          gameOver();
-        }, 30000);
-
-        $('#complete-task-button').click(function() {
-          completeTask(moneyEarned);
-        });
-      }
-    }
-
-    function startCoffeeGame(moneyEarned) {
-      $('#game').hide();
-      $('#coffeeGame').show();
-
-      let coffeeCup = $('#coffeeCup');
-      let position = 0;
-      let deliveryInterval = setInterval(moveCoffeeCup, 100);
-
-      function moveCoffeeCup() {
-        if (position >= 300) {
-          clearInterval(deliveryInterval);
-          $('#complete-delivery-button').show();
-        } else {
-          position += 5;
-          coffeeCup.css('left', position + 'px');
-        }
-      }
-
-      $('#complete-delivery-button').click(function() {
-        clearInterval(deliveryInterval);
-        $('#coffeeGame').hide();
-        $('#game').show();
+  
+      $('#progressBar').css('width', '100%').stop().animate({ width: '0%' }, 10000);
+  
+      setTimeout(() => {
+        gameOver();
+      }, 30000);
+  
+      $('#complete-task-button').click(function() {
         completeTask(moneyEarned);
       });
     }
-
-    function completeTask(moneyEarned) {
-      let success = Math.random() < 0.9; // 90% chance of success
-      if (success) {
-        money += moneyEarned;
-        level++;
-        salary *= 0.1;
-        startNextJob();
+  }
+  
+  function startCoffeeGame(moneyEarned) {
+    $('#game').hide();
+    $('#coffeeGame').show();
+  
+    let coffeeCup = $('#coffeeCup');
+    let position = 0;
+    let deliveryInterval = setInterval(moveCoffeeCup, 100);
+  
+    function moveCoffeeCup() {
+      if (position >= 300) {
+        clearInterval(deliveryInterval);
+        $('#complete-delivery-button').show();
       } else {
-        const moneyLost = salary * 50;
-        money -= moneyLost;
-        $('#game').html(`
-          <h2>Failed!</h2>
-          <p>Lost: $${moneyLost}</p>
-          <p>Money: $${money}</p>
-          <button id="quit-button">Quit</button>
-        `);
-        $('#quit-button').click(function() {
-          gameOver();
-        });
+        position += 5;
+        coffeeCup.css('left', position + 'px');
       }
     }
-
-    function displayGoals() {
-      const goalsList = $('#goals-list');
-      goalsList.empty();
-      goals.forEach(goal => {
-        goalsList.append(`<li>${goal.name}: $${goal.value}</li>`);
-      });
-    }
-
-    function gameOver() {
+  
+    $('#complete-delivery-button').click(function() {
+      clearInterval(deliveryInterval);
+      $('#coffeeGame').hide();
+      $('#game').show();
+      completeTask(moneyEarned);
+    });
+  }
+  
+  function completeTask(moneyEarned) {
+    let success = Math.random() < 0.99; // 90% chance of success
+    if (success) {
+      money += moneyEarned;
+      level++;
+      salary *= 0.1;
       if (money >= housePrice) {
         $('#game').html(`
           <h2>Congratulations!</h2>
           <p>You've unlocked the house!</p>
           <button id="restart-button">Restart</button>
         `);
+        $('#restart-button').click(function() {
+          location.reload();
+        });
       } else {
-        $('#game').html(`
-          <h2>You're Fired!</h2>
-          <button id="restart-button">Restart</button>
-        `);
+        startNextJob();
       }
-      $('#restart-button').click(function() {
-        location.reload();
+    } else {
+      const moneyLost = salary * 50;
+      money -= moneyLost;
+      $('#game').html(`
+        <h2>Failed!</h2>
+        <p>Lost: $${moneyLost}</p>
+        <p>Money: $${money}</p>
+        <button id="quit-button">Quit</button>
+      `);
+      $('#quit-button').click(function() {
+        gameOver();
       });
     }
-  </script>
+  }
+  
+  function displayGoals() {
+    const goalsList = $('#goals-list');
+    goalsList.empty();
+    goals.forEach(goal => {
+      goalsList.append(`<li>${goal.name}: $${goal.value}</li>`);
+    });
+  }
+  
+  function gameOver() {
+    $('#game').html(`
+      <h2>You're Fired!</h2>
+      <button id="restart-button">Restart</button>
+    `);
+    $('#restart-button').click(function() {
+      location.reload();
+    });
+  }
+</script>
 </body>
 </html>
