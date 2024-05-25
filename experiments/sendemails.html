@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Office Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+  }
+  
+  .container {
+      width: 50%;
+      margin: auto;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-top: 50px;
+  }
+  
+  h1, h2 {
+      text-align: center;
+  }
+  
+  .email-form {
+      margin-bottom: 20px;
+  }
+  
+  .email-form label {
+      display: block;
+      margin-top: 10px;
+  }
+  
+  .email-form select, 
+  .email-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+  }
+  
+  #send-button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+  }
+  
+  #send-button:hover {
+      background-color: #45a049;
+  }
+  
+  .game-log {
+      margin-top: 20px;
+  }
+  
+  #log-list {
+      list-style-type: none;
+      padding: 0;
+  }
+  </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Email Office Game</h1>
+        <div class="email-form">
+            <label for="recipient">Recipient:</label>
+            <select id="recipient">
+                <option value="Alice">Alice</option>
+                <option value="Bob">Bob</option>
+                <option value="Charlie">Charlie</option>
+                <option value="Dana">Dana</option>
+            </select>
+
+            <label for="message">Message:</label>
+            <textarea id="message" rows="4" cols="50"></textarea>
+
+            <button id="send-button">Send Email</button>
+        </div>
+
+        <div class="game-log">
+            <h2>Game Log</h2>
+            <ul id="log-list"></ul>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+    document.getElementById('send-button').addEventListener('click', sendEmail);
+
+      function sendEmail() {
+          const recipient = document.getElementById('recipient').value;
+          const message = document.getElementById('message').value;
+          
+          if (message.trim() === '') {
+              alert('Please type a message before sending.');
+              return;
+          }
+      
+          const logList = document.getElementById('log-list');
+          const logItem = document.createElement('li');
+          logItem.textContent = `Email sent to ${recipient}: "${message}"`;
+          
+          logList.appendChild(logItem);
+      
+          document.getElementById('message').value = ''; // Clear the message box
+      }
+      </script>
+</body>
+</html>

@@ -2,12 +2,7 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-image: url('img/officecubicle1.webp');
-  background-color: #c3c3c3;
-  background-size: cover;
-  background-position: center;
-  background-repeat: repeat;
-  background-attachment: fixed;
+  background-color: #f0f0f0;
 }
 .container {
   display: flex;
@@ -15,7 +10,7 @@ body {
   max-width: 800px;
   margin: 20px auto;
   padding: 20px;
-  background-color: #ffffff;
+  background-color: #fff;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -26,7 +21,7 @@ body {
 .house-container {
   flex-basis: 200px;
   padding-left: 20px;
-  border-left: 1px solid #d0d0d0;
+  border-left: 1px solid #ccc;
 }
 h1, h2, h3 {
   text-align: center;
@@ -54,18 +49,8 @@ button:hover {
 .progress-bar {
   height: 100%;
   background-color: #007bff;
-  width: 100%;
+  animation: progressAnimation 10s linear forwards; /* Adjust animation duration here */
 }
-#coffeeGame {
-  display: none;
-  text-align: center;
-}
-#coffeeGame img {
-  width: 50px;
-  position: relative;
-  transition: left 0.1s;
-}
-
 @keyframes progressAnimation {
   from {
     width: 100%;
