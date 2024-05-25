@@ -67,6 +67,7 @@
       background-color: #ccc;
       border-radius: 5px;
       overflow: hidden;
+      display: none; /* Hide initially */
     }
     .progress-bar {
       height: 100%;
@@ -178,6 +179,29 @@
       display: none;
       pointer-events: none;
     }
+    .game-over {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      z-index: 1002;
+      animation: fadeOut 3s forwards;
+    }
+    @keyframes fadeOut {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
@@ -190,7 +214,7 @@
     <div id="game">
       <button id="start-button" disabled>Start</button>
     </div>
-    <div class="progress-bar-container">
+    <div class="progress-bar-container" id="progress-container">
       <div class="progress-bar" id="progressBar"></div>
     </div>
   </div>
@@ -266,6 +290,10 @@
   <source src="sounds/office_sounds.mp3" type="audio/mpeg">
 </audio>
 
+<div class="game-over" id="game-over">
+  <h1>GAME OVER</h1>
+</div>
+
 <script>
   let level = 1; // Initializes the level variable
   let salary = 0.1; // Initializes the salary variable
@@ -292,6 +320,7 @@
 
   $(document).ready(function() { // Runs the function when the document is ready
     $('#start-button').click(function() {
+      $('#progress-container').show(); // Show progress bar container
       startNextJob(); // Starts the next job when the start button is clicked
     });
 
@@ -475,13 +504,14 @@
   }
 
   function gameOver() { // Function to end the game
-    $('#game').html(`
-      <h2>You're Fired!</h2>
-      <button id="restart-button">Restart</button>
-    `); // Displays the game over message
-    $('#restart-button').click(function() {
-      location.reload(); // Reloads the page
-    });
+    $('#progress-container').hide(); // Hide progress bar container
+    $('#game').hide(); // Hide game content
+    $('#game-over').show(); // Show game over screen
+
+    setTimeout(() => {
+      $('#game-over').hide(); // Hide game over screen
+      showTutorial(); // Restart tutorial
+    }, 3000); // Show game over screen for 3 seconds
   }
 
   function startMeeting() {
@@ -527,11 +557,22 @@
 
   function endMeetingGame() {
     setTimeout(() => {
-      $('#meetingGame').hide();
-      $('#game').show();
+      $('#meetingGame').hide(); // Hide meeting game
+      $('#game').show(); // Show main game
       completeTask(150); // Example reward for completing the meeting
       startNextJob(); // Proceed to the next job after the meeting game ends
     }, 3000);
+  }
+
+  function applyInflation() { // Function to apply inflation
+    inflation += 0.1; // Increase inflation by 0.1%
+    $('#inflation-counter').text(`Inflation: ${inflation.toFixed(1)}%`); // Update inflation counter
+
+    goals.forEach(goal => {
+      goal.value += goal.value * 0.001; // Increase each goal value by 0.1%
+    });
+
+    displayGoals(); // Update the displayed goals
   }
 </script>
 </body>
