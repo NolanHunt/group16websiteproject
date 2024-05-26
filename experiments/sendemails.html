@@ -6,66 +6,76 @@
     <title>Email Office Game</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-  }
-  
-  .container {
-      width: 50%;
-      margin: auto;
-      background-color: #fff;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      margin-top: 50px;
-  }
-  
-  h1, h2 {
-      text-align: center;
-  }
-  
-  .email-form {
-      margin-bottom: 20px;
-  }
-  
-  .email-form label {
-      display: block;
-      margin-top: 10px;
-  }
-  
-  .email-form select, 
-  .email-form textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-  }
-  
-  #send-button {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-  }
-  
-  #send-button:hover {
-      background-color: #45a049;
-  }
-  
-  .game-log {
-      margin-top: 20px;
-  }
-  
-  #log-list {
-      list-style-type: none;
-      padding: 0;
-  }
-  </style>
+      body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 50%;
+    margin: auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+.email-form {
+    margin-bottom: 20px;
+}
+
+.email-form label {
+    display: block;
+    margin-top: 10px;
+}
+
+.email-form select, 
+.email-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+#send-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#send-button:hover {
+    background-color: #45a049;
+}
+
+.game-log {
+    margin-top: 20px;
+}
+
+#log-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.boss-message {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #ffcccc;
+    color: red;
+    display: none;
+    text-align: center;
+    border: 1px solid red;
+}
+    </style>
 </head>
 <body>
     <div class="container">
@@ -89,28 +99,40 @@
             <h2>Game Log</h2>
             <ul id="log-list"></ul>
         </div>
+        
+        <div class="boss-message" id="boss-message">
+            <p>Your boss says: "Make sure your email is at least 100 characters long and includes the phrase 'I will try my best'."</p>
+        </div>
     </div>
     <script src="script.js"></script>
     <script>
-    document.getElementById('send-button').addEventListener('click', sendEmail);
+      document.getElementById('send-button').addEventListener('click', sendEmail);
 
-      function sendEmail() {
-          const recipient = document.getElementById('recipient').value;
-          const message = document.getElementById('message').value;
-          
-          if (message.trim() === '') {
-              alert('Please type a message before sending.');
-              return;
-          }
-      
-          const logList = document.getElementById('log-list');
-          const logItem = document.createElement('li');
-          logItem.textContent = `Email sent to ${recipient}: "${message}"`;
-          
-          logList.appendChild(logItem);
-      
-          document.getElementById('message').value = ''; // Clear the message box
-      }
-      </script>
+function sendEmail() {
+    const recipient = document.getElementById('recipient').value;
+    const message = document.getElementById('message').value;
+    const bossMessage = document.getElementById('boss-message');
+    
+    if (message.trim() === '') {
+        alert('Please type a message before sending.');
+        return;
+    }
+
+    if (message.length < 100 || !message.includes("I will try my best")) {
+        bossMessage.style.display = 'block';
+        return;
+    } else {
+        bossMessage.style.display = 'none';
+    }
+
+    const logList = document.getElementById('log-list');
+    const logItem = document.createElement('li');
+    logItem.textContent = `Email sent to ${recipient}: "${message}"`;
+    
+    logList.appendChild(logItem);
+
+    document.getElementById('message').value = ''; // Clear the message box
+}
+    </script>
 </body>
 </html>
