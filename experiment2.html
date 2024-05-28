@@ -465,12 +465,25 @@
     });
   }
 
-  function startMeetingGame(moneyEarned) { // Function to start the meeting game
-    $('#game').hide(); // Hides the main game
-    $('#meetingGame').show(); // Shows the meeting game
-  }
+  function startMeetingGame(moneyEarned) {
+    resetMeetingGame(); // Reset the meeting game state
+    $('#game').hide();
+    $('#meetingGame').show();
+}
 
-  function startEmailGame(moneyEarned) { // Function to start the email game
+  function hideMeetingGame() {
+    $('#meetingGame').hide();
+    $('#game').show();
+}
+
+function resetMeetingGame() {
+    document.getElementById('story').innerText = "You are sitting in a meeting with your boss. Listen carefully and make choices to influence the outcome.";
+    document.querySelector('.buttons').innerHTML = `
+        <button onclick="startMeeting()">Start Meeting</button>
+    `;
+}
+
+  function startEmailGame(moneyEarned) {
     $('#game').hide(); // Hides the main game
     $('#emailGame').show(); // Shows the email game
     $('#send-button').off('click').on('click', function() {
@@ -498,46 +511,46 @@
 
         $('#emailGame').hide(); // Hides the email game
         $('#game').show(); // Shows the main game
-        completeTask(moneyEarned); // Completes the task
+        completeTask(moneyEarned); // Completes the task and updates the game state
     });
-  }
+}
 
-  function completeTask(moneyEarned) { // Function to complete the task
+function completeTask(moneyEarned) {
     let success = Math.random() < 0.99; // 99% chance of success
     if (success) { // If the task is successful
-      money += moneyEarned; // Increases the money
-      level++; // Increases the level
-      salary *= 0.1; // Increases the salary
+        money += moneyEarned; // Increases the money
+        level++; // Increases the level
+        salary *= 0.1; // Increases the salary
 
-      checkGoalsCompletion(); // Checks and handles goals completion
+        checkGoalsCompletion(); // Checks and handles goals completion
 
-      if (money >= housePrice) { // If the house is unlocked
-        createConfetti(); // Creates confetti
-        $('#game').html(`
-          <h2>Congratulations!</h2>
-          <p>You've unlocked the house!</p>
-          <button id="restart-button">Restart</button>
-        `); // Displays the congratulations message
-        $('#restart-button').click(function() {
-          location.reload(); // Reloads the page
-        });
-      } else {
-        startNextJob(); // Starts the next job
-      }
+        if (money >= housePrice) { // If the house is unlocked
+            createConfetti(); // Creates confetti
+            $('#game').html(`
+                <h2>Congratulations!</h2>
+                <p>You've unlocked the house!</p>
+                <button id="restart-button">Restart</button>
+            `); // Displays the congratulations message
+            $('#restart-button').click(function() {
+                location.reload(); // Reloads the page
+            });
+        } else {
+            startNextJob(); // Starts the next job
+        }
     } else {
-      const moneyLost = salary * 50; // Calculates the money lost
-      money -= moneyLost; // Decreases the money
-      $('#game').html(`
-        <h2>Failed!</h2>
-        <p>Lost: $${moneyLost}</p>
-        <p>Money: $${money}</p>
-        <button id="quit-button">Quit</button>
-      `); // Displays the failure message
-      $('#quit-button').click(function() {
-        gameOver(); // Ends the game
-      });
+        const moneyLost = salary * 50; // Calculates the money lost
+        money -= moneyLost; // Decreases the money
+        $('#game').html(`
+            <h2>Failed!</h2>
+            <p>Lost: $${moneyLost}</p>
+            <p>Money: $${money}</p>
+            <button id="quit-button">Quit</button>
+        `); // Displays the failure message
+        $('#quit-button').click(function() {
+            gameOver(); // Ends the game
+        });
     }
-  }
+}
 
   function giveWarning() { // Function to give a warning when time runs out
     warnings++; // Increases the number of warnings
@@ -585,52 +598,51 @@
   function startMeeting() {
     document.getElementById('story').innerText = "The meeting has started. Your boss is talking about the company's quarterly performance.";
     document.querySelector('.buttons').innerHTML = `
-      <button onclick="takeNotes()">Take Notes</button>
-      <button onclick="askQuestion()">Ask a Question</button>
-      <button onclick="zoneOut()">Zone Out</button>
+        <button onclick="takeNotes()">Take Notes</button>
+        <button onclick="askQuestion()">Ask a Question</button>
+        <button onclick="zoneOut()">Zone Out</button>
     `;
-  }
+}
 
-  function takeNotes() {
+function takeNotes() {
     document.getElementById('story').innerText = "You start taking detailed notes. Your boss notices and is impressed with your attentiveness.";
     document.querySelector('.buttons').innerHTML = `<p>Outcome: Your boss appreciates your effort and you receive positive feedback.</p>`;
-    endMeetingGame();
-  }
+    endMeetingGame(150); 
+}
 
-  function askQuestion() {
+function askQuestion() {
     document.getElementById('story').innerText = "You raise your hand and ask a relevant question. Your boss appreciates your engagement and provides a detailed answer.";
     document.querySelector('.buttons').innerHTML = `<p>Outcome: You gain valuable information and your boss respects your curiosity.</p>`;
-    endMeetingGame();
-  }
+    endMeetingGame(150); 
+}
 
-  function zoneOut() {
+function zoneOut() {
     document.getElementById('story').innerText = "You zone out and start daydreaming. Your boss notices and calls you out.";
     document.querySelector('.buttons').innerHTML = `
-      <button onclick="apologize()">Apologize and Refocus</button>
-      <button onclick="makeExcuse()">Make an Excuse</button>
+        <button onclick="apologize()">Apologize and Refocus</button>
+        <button onclick="makeExcuse()">Make an Excuse</button>
     `;
-  }
+}
 
-  function apologize() {
+function apologize() {
     document.getElementById('story').innerText = "You apologize and promise to pay better attention. Your boss accepts your apology and continues with the meeting.";
     document.querySelector('.buttons').innerHTML = `<p>Outcome: You avoid further trouble but feel embarrassed.</p>`;
-    endMeetingGame();
-  }
+    endMeetingGame(100); 
+}
 
-  function makeExcuse() {
+function makeExcuse() {
     document.getElementById('story').innerText = "You try to make an excuse, but your boss is not convinced.";
     document.querySelector('.buttons').innerHTML = `<p>Outcome: Your boss is disappointed with your lack of professionalism.</p>`;
-    endMeetingGame();
-  }
+    endMeetingGame(50); 
+}
 
-  function endMeetingGame() {
+function endMeetingGame(reward) {
     setTimeout(() => {
-      $('#meetingGame').hide(); // Hide the meeting game
-      $('#game').show(); // Show the main game
-      completeTask(150); // Example reward for completing the meeting
-      startNextJob(); // Proceed to the next job after the meeting game ends
+        hideMeetingGame(); 
+        completeTask(reward); 
+        startNextJob(); 
     }, 3000);
-  }
+}
 
   function applyInflation() {
     inflation += 0.1; // Increase inflation by 0.1%
