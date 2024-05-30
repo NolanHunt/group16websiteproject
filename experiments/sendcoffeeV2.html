@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Delivery Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        #game {
+            text-align: center;
+        }
+
+        .person {
+            width: 50px;
+            height: 50px;
+            background-color: lightblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px;
+        }
+
+        #coffee {
+            font-size: 30px;
+            cursor: pointer;
+            display: inline-block;
+            margin-bottom: 20px;
+            user-select: none; /* Prevent text selection while dragging */
+        }
+
+        #score {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+<div id="game">
+    <h1>Coffee Delivery Game</h1>
+    <div id="office"></div>
+    <div id="coffee" draggable="true">☕</div>
+    <div id="score">Score: 0</div>
+    <div id="timer">Time Left: 30s</div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const officeDiv = document.getElementById("office");
+        const scoreDiv = document.getElementById("score");
+        const timerDiv = document.getElementById("timer");
+
+        let score = 0;
+        let timeLeft = 30;
+
+        // Function to create a person element
+        function createPerson(id) {
+            const person = document.createElement("div");
+            person.className = "person";
+            person.id = id;
+            person.textContent = id;
+            officeDiv.appendChild(person);
+        }
+
+        // Function to update timer
+        function updateTimer() {
+            timerDiv.textContent = `Time Left: ${timeLeft}s`;
+            if (timeLeft === 0) {
+                clearInterval(timerInterval);
+                endGame();
+            }
+            timeLeft--;
+        }
+
+        // Create initial set of people
+        createPerson("person1");
+        createPerson("person2");
+        createPerson("person3");
+
+        // Make coffee draggable
+        const coffee = document.getElementById("coffee");
+        coffee.addEventListener("dragstart", function (event) {
+            event.dataTransfer.setData("text/plain", event.target.id);
+        });
+
+        // Function to handle dropping coffee on people
+        officeDiv.addEventListener("drop", function (event) {
+            event.preventDefault();
+            const data = event.dataTransfer.getData("text");
+            if (event.target.classList.contains("person")) {
+                event.target.appendChild(document.getElementById(data));
+                score++;
+                scoreDiv.textContent = `Score: ${score}`;
+                // Add new person after coffee is delivered
+                createPerson("person" + (officeDiv.childElementCount + 1));
+            }
+        });
+
+        officeDiv.addEventListener("dragover", function (event) {
+            event.preventDefault();
+        });
+
+        // Start timer
+        const timerInterval = setInterval(updateTimer, 1000);
+
+        // Function to end the game
+        function endGame() {
+            coffee.removeEventListener("dragstart");
+            officeDiv.removeEventListener("drop");
+            officeDiv.removeEventListener("dragover");
+            alert(`Game Over! Your final score is ${score}.`);
+        }
+    });
+</script>
+</body>
+</html>
