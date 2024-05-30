@@ -34,6 +34,7 @@
             cursor: pointer;
             display: inline-block;
             margin-bottom: 20px;
+            user-select: none; /* Prevent text selection while dragging */
         }
 
         #score {
@@ -45,7 +46,7 @@
 <div id="game">
     <h1>Coffee Delivery Game</h1>
     <div id="office"></div>
-    <div id="coffee">☕</div>
+    <div id="coffee" draggable="true">☕</div>
     <div id="score">Score: 0</div>
     <div id="timer">Time Left: 30s</div>
 </div>
@@ -84,7 +85,10 @@
         createPerson("person3");
 
         // Make coffee draggable
-        document.getElementById("coffee").draggable = true;
+        const coffee = document.getElementById("coffee");
+        coffee.addEventListener("dragstart", function (event) {
+            event.dataTransfer.setData("text/plain", event.target.id);
+        });
 
         // Function to handle dropping coffee on people
         officeDiv.addEventListener("drop", function (event) {
@@ -108,7 +112,7 @@
 
         // Function to end the game
         function endGame() {
-            document.getElementById("coffee").remove();
+            coffee.removeEventListener("dragstart");
             officeDiv.removeEventListener("drop");
             officeDiv.removeEventListener("dragover");
             alert(`Game Over! Your final score is ${score}.`);
