@@ -1,1 +1,346 @@
 // Here until we can figure out how to successfully link the index.html, then copy and paste the <script></script> //
+
+let level = 1; // Initializes the level variable
+let salary = 0.1; // Initializes the salary variable
+let money = 0; // Initializes the money variable
+let warnings = 0; // Initializes the warnings variable
+let inflation = 0; // Initializes the inflation counter
+let jobCount = 0; // Initialize job count for tracking completed jobs
+const housePrice = 1000000; // Sets the price of the unlockable house
+const goalsPrice = 800; // Total price of all goals
+const jobs = [ // Array of job descriptions
+"Deliver the coffees",
+"Print the papers",
+"Send a bunch of emails",
+"Organizing/Copying files",
+"Sitting in meetings and talking"
+];
+const moneyEarnedPerJob = [50, 75, 100, 125, 150]; // Array of money earned for each job
+const goals = [ // Array of goal objects with name and value properties
+{ name: "Rent on apartment", value: 500 },
+{ name: "Groceries", value: 100 },
+{ name: "Water bill", value: 50 },
+{ name: "Internet bill", value: 75 },
+{ name: "Electric bill", value: 75 }
+];
+
+let inflationInterval; // Declare inflationInterval
+
+$(document).ready(function() { // Runs the function when the document is ready
+$('#start-button').click(function() {
+console.log("Start button clicked");
+startNextJob(); // Starts the next job when the start button is clicked
+$('.progress-bar-container').show(); // Show progress bar
+inflationInterval = setInterval(applyInflation, 10000); // Apply inflation every 10 seconds after start
+});
+
+$('#houseContainer').mousemove(function(event) {
+adjustSpeed(event.clientY); // Adjusts the tutorial scroll speed based on mouse position
+});
+
+showTutorial(); // Shows the tutorial
+});
+
+function showTutorial() { // Function to show the tutorial
+$('#overlay').show(); // Displays the overlay
+$('#tutorial').show(); // Displays the tutorial text
+displayGoals(); // Displays the goals
+
+setTimeout(() => {
+$('#overlay').hide(); // Hides the overlay after the tutorial ends
+$('#start-button').prop('disabled', false); // Enables the start button
+console.log("Tutorial ended, start button enabled");
+$('#content').removeClass('blur-effect'); // Removes the blur effect
+document.getElementById('background-audio').play(); // Plays the background audio
+console.log("Start button state: " + $('#start-button').prop('disabled'));
+}, 500); // Duration of the scrolling text animation (extended to 20 seconds)
+}
+
+function adjustSpeed(mouseY) { // Function to adjust the tutorial scroll speed
+const speedFactor = Math.max(0.1, 1 - (mouseY / window.innerHeight)); // Calculates the speed factor based on mouse position
+document.querySelector('.scrolling-text').style.animationDuration = `${60 * speedFactor}s`; // Adjusts the animation duration
+}
+
+function createConfetti() { // Function to create confetti animation
+for (let i = 0; i < 100; i++) { // Creates 100 confetti pieces
+const confetti = document.createElement('div'); // Creates a new div element for confetti
+confetti.classList.add('confetti'); // Adds the confetti class to the element
+confetti.style.left = Math.random() * 100 + 'vw'; // Randomly positions the confetti horizontally
+confetti.style.top = -10 + 'px'; // Positions the confetti above the viewport
+confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`; // Randomly colors the confetti
+confetti.style.setProperty('--direction', Math.random() > 0.5 ? 1 : -1); // Randomly sets the direction of the confetti
+document.body.appendChild(confetti); // Adds the confetti to the body
+
+setTimeout(() => {
+confetti.remove(); // Removes the confetti after 3 seconds
+}, 3000);
+}
+}
+
+function startNextJob() { // Function to start the next job
+const randomJobIndex = Math.floor(Math.random() * jobs.length); // Randomly selects a job
+const jobName = jobs[randomJobIndex]; // Gets the name of the selected job
+const moneyEarned = moneyEarnedPerJob[randomJobIndex]; // Gets the money earned for the selected job
+
+jobCount++; // Increment the job count
+
+if (jobCount > 5) { // Reset progress bar after 5 jobs
+jobCount = 1; // Reset job count
+$('#progressBar').stop().css('width', '100%'); // Reset progress bar width
+}
+
+if (jobName === "Deliver the coffees") { // If the selected job is "Deliver the coffees"
+startCoffeeGame(moneyEarned); // Starts the coffee game
+} else if (jobName === "Sitting in meetings and talking") { // If the selected job is "Sitting in meetings and talking"
+startMeetingGame(moneyEarned); // Starts the meeting game
+} else if (jobName === "Send a bunch of emails") { // If the selected job is "Send a bunch of emails"
+startEmailGame(moneyEarned); // Starts the email game
+} else { // For all other jobs
+$('#game').html(`
+<h2>Job ${level}: ${jobName}</h2>
+<p>Money: $${money}</p>
+<p>Time left: <span id="timeLeft">10</span> seconds</p>
+<button id="complete-task-button">Complete Task</button>
+`); // Displays the job details
+
+$('#progressBar').css('width', '100%').stop().animate({ width: '0%' }, 10000, function() {
+giveWarning(); // Gives a warning if time runs out
+}); // Animates the progress bar
+
+setTimeout(() => {
+gameOver(); // Ends the game after 30 seconds
+}, 30000);
+
+$('#complete-task-button').click(function() {
+completeTask(moneyEarned); // Completes the task when the complete task button is clicked
+});
+}
+}
+
+function startCoffeeGame(moneyEarned) { // Function to start the coffee game
+$('#game').hide(); // Hides the main game
+$('#coffeeGame').show(); // Shows the coffee game
+
+let coffeeCup = $('#coffeeCup'); // Selects the coffee cup element
+let position = 0; // Initializes the position variable
+let deliveryInterval = setInterval(moveCoffeeCup, 100); // Sets an interval to move the coffee cup
+
+function moveCoffeeCup() {
+if (position >= 300) { // If the coffee cup has moved 300 pixels
+clearInterval(deliveryInterval); // Clears the interval
+$('#complete-delivery-button').show(); // Shows the complete delivery button
+} else {
+position += 5; // Increases the position
+coffeeCup.css('left', position + 'px'); // Moves the coffee cup
+}
+}
+
+$('#complete-delivery-button').click(function() {
+clearInterval(deliveryInterval); // Clears the interval
+$('#coffeeGame').hide(); // Hides the coffee game
+$('#game').show(); // Shows the main game
+completeTask(moneyEarned); // Completes the task
+});
+}
+
+function startMeetingGame(moneyEarned) { // Function to start the meeting game
+resetMeetingGame(); // Reset the meeting game state
+$('#game').hide(); // Hides the main game
+$('#meetingGame').show(); // Shows the meeting game
+}
+
+function startEmailGame(moneyEarned) {
+$('#game').hide(); // Hides the main game
+$('#emailGame').show(); // Shows the email game
+$('#send-button').off('click').on('click', function() {
+const recipient = $('#recipient').val();
+const message = $('#message').val();
+const bossMessage = $('#boss-message');
+
+if (message.trim() === '') {
+alert('Please type a message before sending.');
+return;
+}
+
+if (message.length < 100 || !message.includes("I will try my best")) {
+bossMessage.show();
+return;
+} else {
+bossMessage.hide();
+}
+
+const logList = $('#log-list');
+const logItem = $('<li></li>').text(`Email sent to ${recipient}: "${message}"`);
+logList.append(logItem);
+
+$('#message').val(''); // Clear the message box
+
+$('#emailGame').hide(); // Hides the email game
+$('#game').show(); // Shows the main game
+completeTask(moneyEarned); // Completes the task and updates the game state
+});
+}
+
+function completeTask(moneyEarned) {
+let success = Math.random() < 0.99; // 99% chance of success
+if (success) { // If the task is successful
+money += moneyEarned; // Increases the money
+level++; // Increases the level
+salary *= 0.1; // Increases the salary
+
+checkGoalsCompletion(); // Checks and handles goals completion
+
+if (money >= housePrice) { // If the house is unlocked
+createConfetti(); // Creates confetti
+$('#game').html(`
+<h2>Congratulations!</h2>
+<p>You've unlocked the house!</p>
+<button id="restart-button">Restart</button>
+`); // Displays the congratulations message
+$('#restart-button').click(function() {
+location.reload(); // Reloads the page
+});
+} else {
+startNextJob(); // Starts the next job
+}
+} else {
+const moneyLost = salary * 50; // Calculates the money lost
+money -= moneyLost; // Decreases the money
+$('#game').html(`
+<h2>Failed!</h2>
+<p>Lost: $${moneyLost}</p>
+<p>Money: $${money}</p>
+<button id="quit-button">Quit</button>
+`); // Displays the failure message
+$('#quit-button').click(function() {
+gameOver(); // Ends the game
+});
+}
+}
+
+function giveWarning() { // Function to give a warning when time runs out
+warnings++; // Increases the number of warnings
+alert(`Warning ${warnings}: You are not meeting the deadlines!`); // Displays the warning alert
+
+if (warnings >= 3) { // If three warnings are given
+showGameOverScreen(); // Show the game over screen
+} else {
+startNextJob(); // Starts the next job
+}
+}
+
+function showGameOverScreen() { // Function to show the Game Over screen
+$('#game').html(`
+<div class="game-over show">
+<h2>Game Over</h2>
+<p>You have been fired!</p>
+</div>
+`);
+
+setTimeout(function() {
+location.reload(); // Restart the game after 10 seconds
+}, 10000); // 10 seconds delay
+}
+
+function displayGoals() { // Function to display the goals
+const goalsList = $('#goals-list'); // Selects the goals list element
+goalsList.empty(); // Clears the goals list
+goals.forEach(goal => {
+goalsList.append(`<li>${goal.name}: $${goal.value.toFixed(2)}</li>`); // Adds each goal to the list
+});
+}
+
+function checkGoalsCompletion() {
+if (money >= goalsPrice) { // If money is greater than or equal to $800
+goals.forEach(goal => {
+if (!goal.completed) { // If the goal is not already completed
+goal.completed = true; // Mark the goal as completed
+createConfetti(); // Create confetti for celebration
+}
+});
+money -= goalsPrice; // Subtract $800 from the money
+alert(`$${goalsPrice} has been deducted for achieving all goals!`);
+displayGoals(); // Update the goals list
+}
+}
+
+function gameOver() { // Function to end the game
+$('#game').html(`
+<h2>You're Fired!</h2>
+<button id="restart-button">Restart</button>
+`); // Displays the game over message
+$('#restart-button').click(function() {
+location.reload(); // Reloads the page
+});
+}
+
+function startMeeting() {
+document.getElementById('story').innerText = "The meeting has started. Your boss is talking about the company's quarterly performance.";
+document.querySelector('.buttons').innerHTML = `
+<button onclick="takeNotes()">Take Notes</button>
+<button onclick="askQuestion()">Ask a Question</button>
+<button onclick="zoneOut()">Zone Out</button>
+`;
+}
+
+function takeNotes() {
+document.getElementById('story').innerText = "You start taking detailed notes. Your boss notices and is impressed with your attentiveness.";
+document.querySelector('.buttons').innerHTML = `<p>Outcome: Your boss appreciates your effort and you receive positive feedback.</p>`;
+endMeetingGame(150); // Reward for completing the meeting
+}
+
+function askQuestion() {
+document.getElementById('story').innerText = "You raise your hand and ask a relevant question. Your boss appreciates your engagement and provides a detailed answer.";
+document.querySelector('.buttons').innerHTML = `<p>Outcome: You gain valuable information and your boss respects your curiosity.</p>`;
+endMeetingGame(150); // Reward for completing the meeting
+}
+
+function zoneOut() {
+document.getElementById('story').innerText = "You zone out and start daydreaming. Your boss notices and calls you out.";
+document.querySelector('.buttons').innerHTML = `
+<button onclick="apologize()">Apologize and Refocus</button>
+<button onclick="makeExcuse()">Make an Excuse</button>
+`;
+}
+
+function apologize() {
+document.getElementById('story').innerText = "You apologize and promise to pay better attention. Your boss accepts your apology and continues with the meeting.";
+document.querySelector('.buttons').innerHTML = `<p>Outcome: You avoid further trouble but feel embarrassed.</p>`;
+endMeetingGame(100); // Less reward for apologizing
+}
+
+function makeExcuse() {
+document.getElementById('story').innerText = "You try to make an excuse, but your boss is not convinced.";
+document.querySelector('.buttons').innerHTML = `<p>Outcome: Your boss is disappointed with your lack of professionalism.</p>`;
+endMeetingGame(50); // Least reward for making an excuse
+}
+
+function endMeetingGame(reward) {
+setTimeout(() => {
+hideMeetingGame(); // Hide the meeting game
+$('#game').show(); // Show the main game
+completeTask(reward); // Example reward for completing the meeting
+startNextJob(); // Proceed to the next job after the meeting game ends
+}, 3000);
+}
+
+function resetMeetingGame() {
+document.getElementById('story').innerText = "You are sitting in a meeting with your boss. Listen carefully and make choices to influence the outcome.";
+document.querySelector('.buttons').innerHTML = `
+<button onclick="startMeeting()">Start Meeting</button>
+`;
+}
+
+function hideMeetingGame() {
+$('#meetingGame').hide();
+$('#game').show();
+}
+
+function applyInflation() {
+inflation += 0.1; // Increase inflation by 0.1%
+$('#inflation-counter').text(`Inflation: ${inflation.toFixed(1)}%`); // Update the inflation counter display
+goals.forEach(goal => {
+goal.value += goal.value * 0.001; // Increase each goal value by 0.1%
+});
+displayGoals(); // Update the goals list
+}
