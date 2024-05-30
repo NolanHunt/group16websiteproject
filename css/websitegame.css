@@ -1,7 +1,7 @@
 /* Here until we can figure out how to successfully link the index.html, then copy and paste the <style></style> */
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Sometype Mono", monospace;
     margin: 0;
     padding: 0;
     background-image: url('../img/officecubicle2obscure.webp');
@@ -36,6 +36,7 @@ h1, h2, h3 {
     text-align: center;
 }
 button {
+    font-family: "Sometype Mono", monospace;
     display: block;
     margin: 10px auto;
     padding: 10px 20px;
