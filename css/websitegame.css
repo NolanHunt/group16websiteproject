@@ -39,12 +39,13 @@ button {
     font-family: "Sometype Mono", monospace;
     display: block;
     margin: 10px auto;
-    padding: 10px 20px;
+    padding: 5px 10px;
     background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 12px;
 }
 button:disabled {
     background-color: #cccccc;
@@ -84,6 +85,10 @@ button:hover:not(:disabled) {
     width: 50px;
     position: relative;
     transition: left 0.1s;
+}
+
+#board-room-img {
+    max-width: 350px;
 }
 .person {
     width: 50px;
@@ -136,14 +141,14 @@ button:hover:not(:disabled) {
     margin-top: 20px;
 }
 .buttons button {
-    padding: 10px 20px;
+    padding: 5px 10px;
     margin: 5px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     background-color: #007BFF;
     color: white;
-    font-size: 16px;
+    font-size: 12px;
 }
 .buttons button:hover {
     background-color: #0056b3;
