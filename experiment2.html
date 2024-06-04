@@ -98,6 +98,11 @@
       position: relative;
       transition: left 0.1s;
     }
+
+
+
+  
+
     .person {
       width: 50px;
       height: 50px;
@@ -255,6 +260,27 @@
       </div>
     </div>
 
+    <!-- Container for the small talk mini-game (moved outside of the main container) -->
+  <div id="smallTalkGame" class="container" style="display: none;">
+    <div id="smallTalkGame">
+      <h2>Small Talk</h2>
+      <p id="smallTalkText"></p>
+      <div class="buttons">
+        <button id="talkButton">Talk to Coworker</button>
+        <button id="ignoreButton">Ignore Coworker</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container blur-effect" id="content">
+    <!-- Container for the main game elements -->
+    <div class="game-container">
+      <!-- Other game elements... -->
+    </div>
+  </div>
+         
+
+
     <!-- Container for the email office mini-game -->
     <div id="emailGame" class="container">
         <h2>Email Office Game</h2>
@@ -343,7 +369,8 @@ const jobs = [ // Array of job descriptions
   "Print the papers",
   "Send a bunch of emails",
   "Organizing/Copying files",
-  "Sitting in meetings and talking"
+  "Sitting in meetings and talking",
+  "Small talk"
 ];
 const moneyEarnedPerJob = [50, 75, 100, 125, 150]; // Array of money earned for each job
 const goals = [ // Array of goal objects with name and value properties
@@ -425,6 +452,8 @@ function startNextJob() { // Function to start the next job
     startMeetingGame(moneyEarned); // Starts the meeting game
   } else if (jobName === "Send a bunch of emails") { // If the selected job is "Send a bunch of emails"
     startEmailGame(moneyEarned); // Starts the email game
+  } else if (jobName === "Small talk") { //If the selected job is "Small talk"
+    startSmallTalkGame(moneyEarned); //Starts the small talk game
   } else { // For all other jobs
     $('#game').html(`
       <h2>Job ${level}: ${jobName}</h2>
@@ -473,11 +502,59 @@ function startCoffeeGame(moneyEarned) { // Function to start the coffee game
   });
 }
 
+//code for small talk minigame
+function startSmallTalkGame(moneyEarned) {
+  $('#game').hide(); // Hides the main game
+  $('#smallTalkGame').show(); // Shows the small talk game
+
+  // Array of small talk options
+  var options = [
+    "Alice has approached your cubicle to talk about her nephew's upcoming clarinet recital. What do you want to do?",
+    "Bob has approached you on your lunch break to talk about golf. His breath smells like tuna. What do you want to do?",
+    "Charlie has approached you in the lobby to invite you to a 3D printing convention. What do you want to do?",
+    "Dana has approached you in the hallway to talk politics. She thinks that Bush is still president. What do you want to do?"
+  ];
+
+  // Randomly select an option
+  var randomIndex = Math.floor(Math.random() * options.length);
+  $('#smallTalkText').text(options[randomIndex]);
+
+  // Show the Small Talk mini-game
+  $('#smallTalkGame').show(); 
+}
+
+$(document).ready(function() {
+  // Start the game loop when the document is ready
+  gameLoop();
+
+  $('#talkButton').click(function() {
+    console.log(click)
+    //trying to test this function
+    giveWarning(); // Call the existing giveWarning() function
+    $('#smallTalkGame').hide(); // Hide the Small Talk mini-game
+    startNextJob(); // Proceed to the next game
+  });
+
+  $('#ignoreButton').click(function() {
+    console.log(click)
+    //trying to test this function
+    $('#smallTalkGame').hide(); // Hide the Small Talk mini-game
+    startNextJob(); // Proceed to the next game
+  });
+});
+
+
+
+
+
+
 function startMeetingGame(moneyEarned) { // Function to start the meeting game
   resetMeetingGame(); // Reset the meeting game state
   $('#game').hide(); // Hides the main game
   $('#meetingGame').show(); // Shows the meeting game
 }
+
+
 
 function startEmailGame(moneyEarned) {
   $('#game').hide(); // Hides the main game
@@ -510,6 +587,7 @@ function startEmailGame(moneyEarned) {
     completeTask(moneyEarned); // Completes the task and updates the game state
   });
 }
+
 
 function completeTask(moneyEarned) {
   let success = Math.random() < 0.99; // 99% chance of success
@@ -655,6 +733,9 @@ function endMeetingGame(reward) {
     startNextJob(); // Proceed to the next job after the meeting game ends
   }, 3000);
 }
+
+
+
 
 function resetMeetingGame() {
   document.getElementById('story').innerText = "You are sitting in a meeting with your boss. Listen carefully and make choices to influence the outcome.";
