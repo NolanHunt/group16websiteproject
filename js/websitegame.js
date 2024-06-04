@@ -1,5 +1,3 @@
-// Here until we can figure out how to successfully link the index.html, then copy and paste the <script></script> //
-
 let level = 1; // Initializes the level variable
 let salary = 0.1; // Initializes the salary variable
 let money = 0; // Initializes the money variable
