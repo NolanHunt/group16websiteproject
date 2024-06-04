@@ -548,18 +548,20 @@ function completeTask(moneyEarned) {
   }
 }
 
-function giveWarning() { // Function to give a warning when time runs out
+function giveWarning() { //Function to give a warning when time runs out
   warnings++; // Increases the number of warnings
   alert(`Warning ${warnings}: You are not meeting the deadlines!`); // Displays the warning alert
 
   if (warnings >= 3) { // If three warnings are given
+    console.log("Showing game over screen");
     showGameOverScreen(); // Show the game over screen
   } else {
     startNextJob(); // Starts the next job
   }
 }
 
-function showGameOverScreen() { // Function to show the Game Over screen
+function showGameOverScreen() { //Function to show the game over screen
+  console.log("Showing game over screen");
   $('#game').html(`
     <div class="game-over show">
       <h2>Game Over</h2>
