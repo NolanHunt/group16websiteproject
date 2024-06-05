@@ -37,20 +37,23 @@ button {
     font-family: "Sometype Mono", monospace;
     display: block;
     margin: 10px auto;
-    padding: 5px 10px;
-    background-color: #007bff;
+    padding: 25px 20px;
+    background: transparent url('../img/pixel art button.png') no-repeat center center;
+    background-size: 90% 70%;
     color: #fff;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 10px;
 }
 button:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
 }
 button:hover:not(:disabled) {
-    background-color: #0056b3;
+    color: #cfcfcf;
+}
+#start-button {
+    padding: 25px 30px;
 }
 .progress-bar-container {
     width: 100%;
@@ -139,17 +142,7 @@ button:hover:not(:disabled) {
     margin-top: 20px;
 }
 .buttons button {
-    padding: 5px 10px;
-    margin: 5px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #007BFF;
-    color: white;
-    font-size: 12px;
-}
-.buttons button:hover {
-    background-color: #0056b3;
+    display: inline-block;
 }
 .scrolling-text {
     position: relative;
