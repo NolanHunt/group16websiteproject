@@ -24,12 +24,16 @@ const goals = [ // Array of goal objects with name and value properties
 
 let inflationInterval; // Declare inflationInterval
 
+let gameInProgress = false; // Initialize flag to track whether a game is in progress
+
 $(document).ready(function() { // Runs the function when the document is ready
     $('#start-button').click(function() {
         console.log("Start button clicked");
+        if (!gameInProgress) { // Check if a game is already in progress
         startNextJob(); // Starts the next job when the start button is clicked
         $('.progress-bar-container').show(); // Show progress bar
         inflationInterval = setInterval(applyInflation, 10000); // Apply inflation every 10 seconds after start
+        }
     });
 
     $('#houseContainer').mousemove(function(event) {
@@ -75,7 +79,10 @@ function createConfetti() { // Function to create confetti animation
     }
 }
 
+
 function startNextJob() { // Function to start the next job
+    gameInProgress = true; // Set game in progress flag to true- should stop games running at the same time
+    
     const randomJobIndex = Math.floor(Math.random() * jobs.length); // Randomly selects a job
     const jobName = jobs[randomJobIndex]; // Gets the name of the selected job
     const moneyEarned = moneyEarnedPerJob[randomJobIndex]; // Gets the money earned for the selected job
@@ -116,6 +123,7 @@ function startNextJob() { // Function to start the next job
 }
 
 function startCoffeeGame(moneyEarned) { // Function to start the coffee game
+    hideAllGames(); //should hide the other games to prevent overlap
     $('#game').hide(); // Hides the main game
     $('#coffeeGame').show(); // Shows the coffee game
 
@@ -137,17 +145,20 @@ function startCoffeeGame(moneyEarned) { // Function to start the coffee game
         clearInterval(deliveryInterval); // Clears the interval
         $('#coffeeGame').hide(); // Hides the coffee game
         $('#game').show(); // Shows the main game
+        hideAllGames(); // should hide other games to prevent overlap
         completeTask(moneyEarned); // Completes the task
     });
 }
 
 function startMeetingGame(moneyEarned) { // Function to start the meeting game
+    hideAllGames(); // should hide other games to prevent overlap
     resetMeetingGame(); // Reset the meeting game state
     $('#game').hide(); // Hides the main game
     $('#meetingGame').show(); // Shows the meeting game
 }
 
 function startEmailGame(moneyEarned) {
+    hideAllGames(); // should hide other games to prevent overlap
     $('#game').hide(); // Hides the main game
     $('#emailGame').show(); // Shows the email game
     $('#send-button').off('click').on('click', function() {
@@ -213,7 +224,12 @@ function completeTask(moneyEarned) {
         $('#quit-button').click(function() {
             gameOver(); // Ends the game
         });
+        gameInProgress = false; // Set game in progress flag to false after completing the task- should stop games running at the same time
     }
+}
+
+function hideAllGames() {
+    $('#coffeeGame, #meetingGame, #emailGame').hide(); // Hide all game elements
 }
 
 function giveWarning() { // Function to give a warning when time runs out
