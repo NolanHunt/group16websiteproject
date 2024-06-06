@@ -10,19 +10,20 @@ body {
     background-attachment: fixed;
 }
 .container {
+    background: transparent url('../img/screen bg.png') no-repeat center center;
+    background-size: 100%;
     display: flex;
     justify-content: space-between;
     max-width: 800px;
+    max-height: 600px;
     margin: 20px auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 70px;
 }
 .game-container {
     flex-grow: 1;
     padding-right: 20px;
     position: relative;
+    
 }
 .house-container {
     flex-basis: 200px;
@@ -76,9 +77,8 @@ button:hover:not(:disabled) {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ffffff;
+    background-color: #efefef;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     padding: 20px;
 }
@@ -87,7 +87,6 @@ button:hover:not(:disabled) {
     position: relative;
     transition: left 0.1s;
 }
-
 #board-room-img {
     max-width: 350px;
 }
@@ -127,9 +126,8 @@ button:hover:not(:disabled) {
     }
 }
 .meeting-container {
-    background-color: #fff;
+    background-color: #efefef;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
