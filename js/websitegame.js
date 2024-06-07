@@ -11,7 +11,8 @@ const jobs = [ // Array of job descriptions
     "Print the papers",
     "Send a bunch of emails",
     "Organizing/Copying files",
-    "Sitting in meetings and talking"
+    "Sitting in meetings and talking",
+    "Small Talk Mini-game"
 ];
 const moneyEarnedPerJob = [50, 75, 100, 125, 150]; // Array of money earned for each job
 const goals = [ // Array of goal objects with name and value properties
@@ -100,6 +101,8 @@ function startNextJob() { // Function to start the next job
         startMeetingGame(moneyEarned); // Starts the meeting game
     } else if (jobName === "Send a bunch of emails") { // If the selected job is "Send a bunch of emails"
         startEmailGame(moneyEarned); // Starts the email game
+    } else if (jobName === "Small Talk Mini-game") { // If the selected job is "Small Talk Mini-game"
+        startSmallTalkGame(moneyEarned); // Starts the small talk game
     } else { // For all other jobs
         $('#game').html(`
         <h2>Job ${level}: ${jobName}</h2>
@@ -190,6 +193,34 @@ function startEmailGame(moneyEarned) {
     });
 }
 
+function startSmallTalkGame(moneyEarned) {
+    hideAllGames(); // should hide other games to prevent overlap
+    $('#game').hide(); // Hides the main game
+    $('#smallTalkGame').show(); // Shows the small talk game
+
+    var options = [
+      "Alice has approached your cubicle to talk about her nephew's upcoming clarinet recital. What do you want to do?",
+      "Bob has approached you on your lunch break to talk about golf. His breath smells like tuna. What do you want to do?",
+      "Charlie has approached you in the lobby to invite you to a 3D printing convention. What do you want to do?",
+      "Dana has approached you in the hallway to talk politics. She thinks that Bush is still president. What do you want to do?"
+    ];
+
+    var randomIndex = Math.floor(Math.random() * options.length);
+    $('#smallTalkText').text(options[randomIndex]);
+
+    $('#talkButton').click(function() {
+      giveWarning(); // Give a warning notification from the boss
+      $('#smallTalkGame').hide(); // Hide the Small Talk mini-game
+      startNextJob(); // Proceed to the next game
+    });
+
+    $('#ignoreButton').click(function() {
+      $('#smallTalkGame').hide(); // Hide the Small Talk mini-game
+      startNextJob(); // Proceed to the next game
+    });
+}
+
+
 function completeTask(moneyEarned) {
     let success = Math.random() < 0.99; // 99% chance of success
     if (success) { // If the task is successful
@@ -229,7 +260,7 @@ function completeTask(moneyEarned) {
 }
 
 function hideAllGames() {
-    $('#coffeeGame, #meetingGame, #emailGame').hide(); // Hide all game elements
+    $('#coffeeGame, #meetingGame, #emailGame, #smallTalkGame').hide(); // Hide all game elements
 }
 
 function giveWarning() { // Function to give a warning when time runs out
