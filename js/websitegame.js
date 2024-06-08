@@ -129,57 +129,22 @@ function startCoffeeGame(moneyEarned) {
     hideAllGames(); // Hides other games to prevent overlap
     $('#game').hide(); // Hides the main game
     $('#coffeeGame').show(); // Shows the coffee game
-
-    const people = $('.person');
-    const deliveryButton= $('#complete-delivery-button');
-    let coffeeCup = $('#coffeeCup'); // Selects the coffee cup element
-    let position = 0; // Initializes the position variable
-    let score = 0; // Initializes the score variable
-    let timer = null;
-
-   function moveCoffeeCup() {
-        $(document).keydown(function(e) {
-            if (e.keyCode === 39 && position < 200) { // Right arrow key
-                position += 5;
-                coffeeCup.css('left', position + 'px');
-            } else if (e.keyCode === 37 && position > 0) { // Left arrow key
-                position -= 5;
-                coffeeCup.css('left', position + 'px');
-            }
-        });
-    }
-    function endGame() {
-        clearInterval(timer);
-        $('#complete-delivery-button').show();
-    }
-    function startTimer() {
-        let seconds = 10;
-        $('#timer').text(seconds);
-        timer = setInterval(function() {
-            seconds--;
-            $('#timer').text(seconds);
-            if (seconds === 0) {
-                endGame();
-            }
-        }, 1000);
-    }
-
-    $('#complete-delivery-button').click(function() {
-        clearInterval(timer); // Clears the interval
-        $('#coffeeGame').hide(); // Hides the coffee game
-        $('#game').show(); // Shows the main game
-        hideAllGames(); // Hides other games to prevent overlap
-        completeTask(moneyEarned); // Adds the score to the main game score
-    });
-
-    $('#coffeeCup').click(function() {
-        if (position >= 200) {
-            score++;
-            $('#score').text(score);
-            position = 0;
-            coffeeCup.css('left', position + 'px');
-        }
-    });
+    let score = 0;
+  
+      // Make coffee draggable
+      $('#coffeeCup').draggable({
+          revert: true
+      });
+  
+      // Make people droppable
+      $('.person').droppable({
+          accept: '#coffeeCup',
+          drop: function(event, ui) {
+              score++;
+              $('#score').text(`Score: ${score}`);
+              alert(`Delivered coffee to ${$(this).attr('id')}!`);
+          }
+      });
 }
 
 function startMeetingGame(moneyEarned) { // Function to start the meeting game
