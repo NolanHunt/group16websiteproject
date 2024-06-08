@@ -73,14 +73,15 @@ button:hover:not(:disabled) {
     display: none;
     text-align: center;
     position: absolute;
-    top: 0;
+    top: 27px;
     left: 0;
     right: 0;
     bottom: 0;
     background-color: #efefef;
     border-radius: 5px;
     z-index: 1000;
-    padding: 15px;
+    padding: 10px;
+    max-height: fit-content;
 }
 #coffeeGame img, #emailGame img {
     width: 50px;
@@ -124,13 +125,6 @@ button:hover:not(:disabled) {
         left: calc(50% + 100px * var(--direction));
         opacity: 0;
     }
-}
-.meeting-container {
-    background-color: #efefef;
-    border-radius: 8px;
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 15px;
 }
 .image-container img {
     max-width: 100%;
