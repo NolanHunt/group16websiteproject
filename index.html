@@ -39,6 +39,25 @@
       </div>
       <div id="coffee">☕</div>
       <div id="score">Score: 0</div>
+      <script src="game.js"></script>
+      <script> 
+      let score = 0;
+  
+      // Make coffee draggable
+      $('#coffee').draggable({
+          revert: true
+      });
+  
+      // Make people droppable
+      $('.person').droppable({
+          accept: '#coffee',
+          drop: function(event, ui) {
+              score++;
+              $('#score').text(`Score: ${score}`);
+              alert(`Delivered coffee to ${$(this).attr('id')}!`);
+          }
+      });
+  </script>
 
     <!-- Container for the meeting simulator mini-game -->
     <div id="meetingGame" class="meeting-container">
