@@ -125,13 +125,14 @@ function startNextJob() { // Function to start the next job
     }
 }
 
-function startCoffeeGame(moneyEarned) { // Function to start the coffee game
-    hideAllGames(); //should hide the other games to prevent overlap
+function startCoffeeGame(moneyEarned) {
+    hideAllGames(); // Hides other games to prevent overlap
     $('#game').hide(); // Hides the main game
     $('#coffeeGame').show(); // Shows the coffee game
 
     let coffeeCup = $('#coffeeCup'); // Selects the coffee cup element
     let position = 0; // Initializes the position variable
+    let score = 0; // Initializes the score variable
     let deliveryInterval = setInterval(moveCoffeeCup, 100); // Sets an interval to move the coffee cup
 
     function moveCoffeeCup() {
@@ -148,8 +149,17 @@ function startCoffeeGame(moneyEarned) { // Function to start the coffee game
         clearInterval(deliveryInterval); // Clears the interval
         $('#coffeeGame').hide(); // Hides the coffee game
         $('#game').show(); // Shows the main game
-        hideAllGames(); // should hide other games to prevent overlap
-        completeTask(moneyEarned); // Completes the task
+        hideAllGames(); // Hides other games to prevent overlap
+        completeTask(moneyEarned); // Adds the score to the main game score
+    });
+
+    $('#coffeeCup').click(function() {
+        if (position >= 300) { // If the coffee cup has reached the delivery point
+            score++; // Increment the score
+            $('#score').text(score); // Update the score display
+            position = 0; // Reset the position
+            coffeeCup.css('left', position + 'px'); // Reset the coffee cup position
+        }
     });
 }
 
