@@ -129,6 +129,22 @@ function startCoffeeGame(moneyEarned) {
     hideAllGames(); // Hides other games to prevent overlap
     $('#game').hide(); // Hides the main game
     $('#coffeeGame').show(); // Shows the coffee game
+    let score = 0;
+  
+      // Make coffee draggable
+      $('#coffee').draggable({
+          revert: true
+      });
+  
+      // Make people droppable
+      $('.person').droppable({
+          accept: '#coffee',
+          drop: function(event, ui) {
+              score++;
+              $('#score').text(`Score: ${score}`);
+              alert(`Delivered coffee to ${$(this).attr('id')}!`);
+          }
+      });
 }
 
 function startMeetingGame(moneyEarned) { // Function to start the meeting game
