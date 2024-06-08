@@ -80,7 +80,7 @@ button:hover:not(:disabled) {
     background-color: #efefef;
     border-radius: 5px;
     z-index: 1000;
-    padding: 20px;
+    padding: 15px;
 }
 #coffeeGame img, #emailGame img {
     width: 50px;
@@ -130,7 +130,7 @@ button:hover:not(:disabled) {
     border-radius: 8px;
     max-width: 600px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 15px;
 }
 .image-container img {
     max-width: 100%;
