@@ -117,6 +117,7 @@ function startNextJob() { // Function to start the next job
 
         $('#complete-task-button').click(function() {
             completeTask(moneyEarned); // Completes the task when the complete task button is clicked
+            $('#progressBar').css('width', '100%').stop()
         });
     }
 }
