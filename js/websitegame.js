@@ -113,11 +113,15 @@ function startNextJob() { // Function to start the next job
         <p>Money: $${money}</p>
         <p>Time left: <span id="timeLeft">3</span> seconds</p>
         <button id="complete-task-button">Complete Task</button>
+        <img src="img/clearcomputer.png" id="computer-image" width = "70">
+        <img src="img/clearprinter.png" id="printer-image" width = "70">
         `); // Displays the job details
+
 
         $('#progressBar').css('width', '100%').stop().animate({ width: '0%' }, 3000, function() {
             giveWarning(); // Gives a warning if time runs out
         }); // Animates the progress bar
+
 
         setTimeout(() => {
             gameOver(); // Ends the game after 20 seconds
