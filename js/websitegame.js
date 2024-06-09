@@ -34,8 +34,8 @@ $(document).ready(function() { // Runs the function when the document is ready
         console.log("Start button clicked");
         if (!gameInProgress) { // Check if a game is already in progress
         startNextJob(); // Starts the next job when the start button is clicked
-        // $('.progress-bar-container').show(); // Show progress bar
-        inflationInterval = setInterval(applyInflation, 10000); // Apply inflation every 10 seconds after start
+        $('.progress-bar-container').show(); // Show progress bar
+        inflationInterval = setInterval(applyInflation, 30000); // Apply inflation every 30 seconds after start
         }
     });
 
@@ -272,7 +272,7 @@ function startBossConversationGame(moneyEarned) {
     $('#bossIgnoreButton').click(function() {
         $('#bossConversationGame').hide(); // Hide the boss conversation mini-game
         giveWarning(); // Give a warning notification from the boss
-        setTimeout(startNextJob, 2000); // Proceed to the next game after 2 seconds
+        setTimeout(startNextJob); // Proceed to the next game after 2 seconds
     });
 }
   
