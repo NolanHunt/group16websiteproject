@@ -271,9 +271,10 @@ function giveWarning() { // Function to give a warning when time runs out
 function showGameOverScreen() { // Function to show the Game Over screen
     $('#game').html(`
     <div class="game-over show">
-    <h2>Game Over</h2>
-    <br>
-    <p>You have been fired!</p>
+        <h2>Game Over</h2>
+        <br>
+        <p>You have been fired!</p>
+        <img src="img/gameover.jpg" alt="Game Over Image" width="1000">
     </div>
     `);
 

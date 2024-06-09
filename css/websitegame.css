@@ -195,8 +195,15 @@ button:hover:not(:disabled) {
     z-index: 1000;
 }
 .game-over.show {
-    opacity: 1;
-
-    
+    opacity: 1; 
 }
 
+#computerImage {
+    width: 100%;
+    width: 400px;
+    height: auto;
+}
+
+#gameOverContainer {
+    display: none;
+}
