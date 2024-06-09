@@ -12,7 +12,8 @@ const jobs = [ // Array of job descriptions
     "Send a bunch of emails",
     "Organizing/Copying files",
     "Sitting in meetings and talking",
-    "Small Talk Mini-game"
+    "Small Talk Mini-game",
+    "Boss Convo"
 ];
 const moneyEarnedPerJob = [50, 75, 100, 125, 150]; // Array of money earned for each job
 const goals = [ // Array of goal objects with name and value properties
@@ -103,6 +104,8 @@ function startNextJob() { // Function to start the next job
         startEmailGame(moneyEarned); // Starts the email game
     } else if (jobName === "Small Talk Mini-game") { // If the selected job is "Small Talk Mini-game"
         startSmallTalkGame(moneyEarned); // Starts the small talk game
+    } else if (jobName === "Boss Convo") { // if selected job is boss convo
+        startBossConversationGame(moneyEarned); // starts boss convo game
     } else { // For all other jobs
         $('#game').html(`
         <h2>Job ${level}: ${jobName}</h2>
@@ -240,6 +243,45 @@ function startSmallTalkGame(moneyEarned) {
     });
 }
 
+// Function to start the boss conversation mini-game
+function startBossConversationGame(moneyEarned) {
+    hideAllGames(); // should hide other games to prevent overlap
+    $('#game').hide(); // Hides the main game
+    $('#bossConversationGame').show(); // Shows the boss conversation game
+    fetchRandomFact();
+
+    // Event listener for the nod button
+    $('#nodButton').click(function() {
+        $('#bossConversationGame').hide(); // Hide the boss conversation mini-game
+        startNextJob(); // Proceed to the next game
+    });
+  
+  // Event listener for the ignore button
+    $('#bossIgnoreButton').click(function() {
+        $('#bossConversationGame').hide(); // Hide the boss conversation mini-game
+        giveWarning(); // Give a warning notification from the boss
+        setTimeout(startNextJob, 2000); // Proceed to the next game after 2 seconds
+    });
+}
+  
+// Function to fetch a random fact from the API
+function fetchRandomFact() {
+    $.ajax({
+      method: 'GET',
+      url: 'https://api.api-ninjas.com/v1/facts',
+      headers: { 'X-Api-Key': 'Uoe5fU8CQIZQwbfkweGnCw==MnqMVWtlcnehf9x4' }, // Replace 'YOUR_API_KEY' with your actual API key
+      contentType: 'application/json',
+      success: function(result) {
+        console.log(result);
+        let bossConversation = "Your boss approached you. They say, '" + result[0].fact + "'. Let that motivate your work throughout the day.";
+        $('#bossConversationText').text(bossConversation);
+      },
+      error: function ajaxError(jqXHR) {
+        console.error('Error: ', jqXHR.responseText);
+      }
+    });
+}
+
 
 function completeTask(moneyEarned) {
     let success = Math.random() < 0.99; // 99% chance of success
@@ -280,7 +322,7 @@ function completeTask(moneyEarned) {
 }
 
 function hideAllGames() {
-    $('#coffeeGame, #meetingGame, #emailGame, #smallTalkGame').hide(); // Hide all game elements
+    $('#coffeeGame, #meetingGame, #emailGame, #smallTalkGame, #bossConversationGame').hide(); // Hide all game elements
 }
 
 function giveWarning() { // Function to give a warning when time runs out

@@ -37,10 +37,9 @@ function startBossConversationGame() {
 
 // Function to fetch a random fact from the API
 function fetchRandomFact() {
-  var limit = 1; // Change the limit here if you want to fetch more facts
   $.ajax({
     method: 'GET',
-    url: 'https://api.api-ninjas.com/v1/facts?limit=' + limit,
+    url: 'https://api.api-ninjas.com/v1/facts',
     headers: { 'X-Api-Key': 'Uoe5fU8CQIZQwbfkweGnCw==MnqMVWtlcnehf9x4' }, // Replace 'YOUR_API_KEY' with your actual API key
     contentType: 'application/json',
     success: function(result) {
