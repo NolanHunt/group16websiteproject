@@ -349,7 +349,7 @@ function giveWarning() { // Function to give a warning when time runs out
     warnings++; // Increases the number of warnings
     alert(`Warning ${warnings}: You are not meeting the deadlines!`); // Displays the warning alert
 
-    if (warnings >= 3) { // If three warnings are given
+    if (warnings == 3) { // If three warnings are given
         showGameOverScreen(); // Show the game over screen
     } else {
         if(activegameID) {
