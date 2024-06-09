@@ -122,12 +122,6 @@ function startNextJob() { // Function to start the next job
         }); // Animates the progress bar
 
 
-<<<<<<< HEAD
-        setTimeout(() => {
-            gameOver(); // Ends the game after 20 seconds
-        }, 20000);
-=======
->>>>>>> ec359bf7750b04f24afb519fdc588899c4245ac7
 
         $('#complete-task-button').click(function() {
             completeTask(moneyEarned); // Completes the task when the complete task button is clicked
