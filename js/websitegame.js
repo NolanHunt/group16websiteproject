@@ -224,10 +224,6 @@ function startEmailGame(moneyEarned) {
     }
 }
 
-function startNextGame() {
-    console.log("Starting next game...");
-}
-
 function startSmallTalkGame(moneyEarned) {
     hideAllGames(); // should hide other games to prevent overlap
     $('#game').hide(); // Hides the main game
