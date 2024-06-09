@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boss Conversation Mini-game</title>
+<style>
+  /* CSS styles for the mini-game */
+  .meeting-container {
+    display: none;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 20px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Container for the boss conversation mini-game -->
+<div id="bossConversationGame" class="meeting-container">
+  <h2>Conversation with your Boss</h2>
+  <p id="bossConversationText"></p>
+  <div class="buttons">
+    <button id="nodButton">Nod and Smile</button>
+    <button id="ignoreButton">Ignore Boss</button>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+// Function to start the boss conversation mini-game
+function startBossConversationGame() {
+  hideAllGames(); // should hide other games to prevent overlap
+  $('#bossConversationGame').show(); // Shows the boss conversation game
+  fetchRandomFact();
+}
+
+// Function to fetch a random fact from the API
+function fetchRandomFact() {
+  $.ajax({
+    method: 'GET',
+    url: 'https://api.api-ninjas.com/v1/facts',
+    headers: { 'X-Api-Key': 'Uoe5fU8CQIZQwbfkweGnCw==MnqMVWtlcnehf9x4' }, // Replace 'YOUR_API_KEY' with your actual API key
+    contentType: 'application/json',
+    success: function(result) {
+      console.log(result);
+      let bossConversation = "Your boss approached you. They say, '" + result[0].fact + "'. Let that motivate your work throughout the day.";
+      $('#bossConversationText').text(bossConversation);
+    },
+    error: function ajaxError(jqXHR) {
+      console.error('Error: ', jqXHR.responseText);
+    }
+  });
+}
+
+// Event listener for the nod button
+$('#nodButton').click(function() {
+  $('#bossConversationGame').hide(); // Hide the boss conversation mini-game
+  startNextJob(); // Proceed to the next game
+});
+
+// Event listener for the ignore button
+$('#ignoreButton').click(function() {
+  $('#bossConversationGame').hide(); // Hide the boss conversation mini-game
+  giveWarning(); // Give a warning notification from the boss
+  setTimeout(startNextJob, 2000); // Proceed to the next game after 2 seconds
+});
+
+// Function to hide all game containers
+function hideAllGames() {
+  $('.meeting-container').hide();
+}
+
+// Dummy functions for startNextJob and giveWarning
+function startNextJob() {
+  alert('Starting next job...');
+}
+
+function giveWarning() {
+  alert('You have been warned!');
+}
+
+// Start the boss conversation mini-game
+startBossConversationGame();
+</script>
+
+</body>
+</html>
