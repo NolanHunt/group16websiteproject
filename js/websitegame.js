@@ -150,7 +150,9 @@ function startCoffeeGame(moneyEarned) {
               alert(`Delivered coffee to ${$(this).attr('id')}!`);
 
               if(score == 3) {
-                startNextJob(); // Start next game
+                score=0;
+                startNextJob();
+                // Start next game
               }
           }
       });
@@ -224,10 +226,6 @@ function startEmailGame(moneyEarned) {
     }
 }
 
-function startNextGame() {
-    console.log("Starting next game...");
-}
-
 function startSmallTalkGame(moneyEarned) {
     hideAllGames(); // should hide other games to prevent overlap
     $('#game').hide(); // Hides the main game
@@ -285,7 +283,7 @@ function fetchRandomFact() {
       contentType: 'application/json',
       success: function(result) {
         console.log(result);
-        let bossConversation = "Your boss approached you. They say, '" + result[0].fact + "'. Let that motivate your work throughout the day.";
+        let bossConversation = "Your boss approaches you. They say, '" + result[0].fact + ". Let that motivate your work throughout the day.'";
         $('#bossConversationText').text(bossConversation);
       },
       error: function ajaxError(jqXHR) {

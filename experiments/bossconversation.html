@@ -44,7 +44,7 @@ function fetchRandomFact() {
     contentType: 'application/json',
     success: function(result) {
       console.log(result);
-      let bossConversation = "Your boss approached you. They say, '" + result[0].fact + "'. Let that motivate your work throughout the day.";
+      let bossConversation = "Your boss approaches you. They say, '" + result[0].fact + ". Let that motivate your work throughout the day.'";
       $('#bossConversationText').text(bossConversation);
     },
     error: function ajaxError(jqXHR) {
