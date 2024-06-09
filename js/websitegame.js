@@ -3,7 +3,6 @@ let salary = 0.1; // Initializes the salary variable
 let money = 0; // Initializes the money variable
 let warnings = 0; // Initializes the warnings variable
 let inflation = 0; // Initializes the inflation counter
-let jobCount = 0; // Initialize job count for tracking completed jobs
 const housePrice = 1000000; // Sets the price of the unlockable house
 const goalsPrice = 800; // Total price of all goals
 const jobs = [ // Array of job descriptions
@@ -89,13 +88,6 @@ function startNextJob() { // Function to start the next job
     const randomJobIndex = Math.floor(Math.random() * jobs.length); // Randomly selects a job
     const jobName = jobs[randomJobIndex]; // Gets the name of the selected job
     const moneyEarned = moneyEarnedPerJob[randomJobIndex]; // Gets the money earned for the selected job
-
-    jobCount++; // Increment the job count
-
-    if (jobCount > 5) { // Reset progress bar after 5 jobs
-        jobCount = 1; // Reset job count
-        $('#progressBar').stop().css('width', '100%'); // Reset progress bar width
-    }
 
     if (jobName === "Deliver the coffees") { // If the selected job is "Deliver the coffees"
         startCoffeeGame(moneyEarned); // Starts the coffee game
