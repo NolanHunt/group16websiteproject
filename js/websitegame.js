@@ -271,13 +271,11 @@ function giveWarning() { // Function to give a warning when time runs out
 function showGameOverScreen() { // Function to show the Game Over screen
     $('#game').html(`
     <div class="game-over show">
-        <h2>Game Over</h2>
-        <br>
-        <p>You have been fired!</p>
-        <img src="img/gameover.jpg" alt="Game Over Image" width="1000">
+    <img src="img/gameover.jpg" alt="Game Over Image" width="1000">
     </div>
     `);
 
+    $('#gameOverContainer').show(); //Show game over container
     setTimeout(function() {
         location.reload(); // Restart the game after 10 seconds
     }, 10000); // 10 seconds delay
@@ -307,7 +305,7 @@ function checkGoalsCompletion() {
 
 function gameOver() { // Function to end the game
     $('#game').html(`
-    <h2>You're Fired!</h2>
+    <img src="img/gameover.jpg" alt="Game Over Image" width="1000">
     <button id="restart-button">Restart</button>
     `); // Displays the game over message
     $('#restart-button').click(function() {
