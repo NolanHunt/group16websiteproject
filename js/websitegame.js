@@ -150,7 +150,9 @@ function startCoffeeGame(moneyEarned) {
               alert(`Delivered coffee to ${$(this).attr('id')}!`);
 
               if(score == 3) {
-                startNextJob(); // Start next game
+                startNextJob();
+                score=0;
+                // Start next game
               }
           }
       });
