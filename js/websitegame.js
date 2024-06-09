@@ -172,7 +172,7 @@ function startEmailGame(moneyEarned) {
 
     const endEmailGame = () => {
         console.log("ending email game");
-        if(!gameEnded) {
+        if (!gameEnded) {
             gameEnded = true;
             console.log("game ended flag set to true");
             giveWarning();
@@ -180,10 +180,9 @@ function startEmailGame(moneyEarned) {
         }
     }; //Function to end game
 
-    const timeoutID = setTimeout(endEmailGame, 10000); //Makes email game end after 20 seconds
+    const timeoutID = setTimeout(endEmailGame, 30000); //Makes email game end after 30 seconds
 
     $('#send-button').off('click').on('click', function() {
-        const recipient = $('#recipient').val();
         const message = $('#message').val();
         const bossMessage = $('#boss-message');
 
@@ -200,28 +199,30 @@ function startEmailGame(moneyEarned) {
         }
 
         const logList = $('#log-list');
-        const logItem = $('<li></li>').text(`Email sent to ${recipient}: "${message}"`);
+        const logItem = $('<li></li>').text(`Email sent: "${message}"`);
         logList.append(logItem);
 
         emailsSent++;
 
         $('#message').val(''); // Clear the message box
 
-        if(emailsSent >=3) {
+        if (emailsSent >= 1) {
             clearTimeout(timeoutID);
             if (!gameEnded) {
                 gameEnded = true;
-            $('#emailGame').hide(); // Hides the email game
-            $('#game').show(); // Shows the main game
-            completeTask(moneyEarned); // Completes the task and updates the game state
-            startNextGame();
+                $('#emailGame').hide(); // Hides the email game
+                $('#game').show(); // Shows the main game
+                completeTask(moneyEarned); // Completes the task and updates the game state
+                startNextGame();
             }
-        }  
+        }
     });
+
     if (typeof startNextGame !== "function") {
         console.error("startNextGame not defined");
     }
 }
+
 
 function startSmallTalkGame(moneyEarned) {
     hideAllGames(); // should hide other games to prevent overlap
