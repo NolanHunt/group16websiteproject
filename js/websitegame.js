@@ -119,9 +119,7 @@ function startNextJob() { // Function to start the next job
             giveWarning(); // Gives a warning if time runs out
         }); // Animates the progress bar
 
-        setTimeout(() => {
-            gameOver(); // Ends the game after 20 seconds
-        }, 20000);
+
 
         $('#complete-task-button').click(function() {
             completeTask(moneyEarned); // Completes the task when the complete task button is clicked
@@ -395,15 +393,6 @@ function checkGoalsCompletion() {
     }
 }
 
-function gameOver() { // Function to end the game
-    $('#game').html(`
-    <img src="img/gameover.jpg" alt="Game Over Image" width="1000">
-    <button id="restart-button">Restart</button>
-    `); // Displays the game over message
-    $('#restart-button').click(function() {
-        location.reload(); // Reloads the page
-    });
-}
 
 function startMeeting() {
     document.getElementById('story').innerText = "The meeting has started. Your boss is talking about the company's quarterly performance.";
