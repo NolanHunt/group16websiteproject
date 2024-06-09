@@ -3,7 +3,6 @@ let salary = 0.1; // Initializes the salary variable
 let money = 0; // Initializes the money variable
 let warnings = 0; // Initializes the warnings variable
 let inflation = 0; // Initializes the inflation counter
-let jobCount = 0; // Initialize job count for tracking completed jobs
 const housePrice = 1000000; // Sets the price of the unlockable house
 const goalsPrice = 800; // Total price of all goals
 const jobs = [ // Array of job descriptions
@@ -90,13 +89,6 @@ function startNextJob() { // Function to start the next job
     const jobName = jobs[randomJobIndex]; // Gets the name of the selected job
     const moneyEarned = moneyEarnedPerJob[randomJobIndex]; // Gets the money earned for the selected job
 
-    jobCount++; // Increment the job count
-
-    if (jobCount > 5) { // Reset progress bar after 5 jobs
-        jobCount = 1; // Reset job count
-        $('#progressBar').stop().css('width', '100%'); // Reset progress bar width
-    }
-
     if (jobName === "Deliver the coffees") { // If the selected job is "Deliver the coffees"
         startCoffeeGame(moneyEarned); // Starts the coffee game
     } else if (jobName === "Sitting in meetings and talking") { // If the selected job is "Sitting in meetings and talking"
@@ -175,7 +167,7 @@ function startEmailGame(moneyEarned) {
 
     const endEmailGame = () => {
         console.log("ending email game");
-        if(!gameEnded) {
+        if (!gameEnded) {
             gameEnded = true;
             console.log("game ended flag set to true");
             giveWarning();
@@ -183,10 +175,9 @@ function startEmailGame(moneyEarned) {
         }
     }; //Function to end game
 
-    const timeoutID = setTimeout(endEmailGame, 10000); //Makes email game end after 20 seconds
+    const timeoutID = setTimeout(endEmailGame, 30000); //Makes email game end after 30 seconds
 
     $('#send-button').off('click').on('click', function() {
-        const recipient = $('#recipient').val();
         const message = $('#message').val();
         const bossMessage = $('#boss-message');
 
@@ -203,28 +194,30 @@ function startEmailGame(moneyEarned) {
         }
 
         const logList = $('#log-list');
-        const logItem = $('<li></li>').text(`Email sent to ${recipient}: "${message}"`);
+        const logItem = $('<li></li>').text(`Email sent: "${message}"`);
         logList.append(logItem);
 
         emailsSent++;
 
         $('#message').val(''); // Clear the message box
 
-        if(emailsSent >=3) {
+        if (emailsSent >= 1) {
             clearTimeout(timeoutID);
             if (!gameEnded) {
                 gameEnded = true;
-            $('#emailGame').hide(); // Hides the email game
-            $('#game').show(); // Shows the main game
-            completeTask(moneyEarned); // Completes the task and updates the game state
-            startNextGame();
+                $('#emailGame').hide(); // Hides the email game
+                $('#game').show(); // Shows the main game
+                completeTask(moneyEarned); // Completes the task and updates the game state
+                startNextGame();
             }
-        }  
+        }
     });
+
     if (typeof startNextGame !== "function") {
         console.error("startNextGame not defined");
     }
 }
+
 
 function startSmallTalkGame(moneyEarned) {
     hideAllGames(); // should hide other games to prevent overlap
