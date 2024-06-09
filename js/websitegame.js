@@ -281,7 +281,7 @@ function fetchRandomFact() {
       contentType: 'application/json',
       success: function(result) {
         console.log(result);
-        let bossConversation = "Your boss approached you. They say, '" + result[0].fact + "'. Let that motivate your work throughout the day.";
+        let bossConversation = "Your boss approaches you. They say, '" + result[0].fact + ". Let that motivate your work throughout the day.'";
         $('#bossConversationText').text(bossConversation);
       },
       error: function ajaxError(jqXHR) {
@@ -345,7 +345,7 @@ function giveWarning() { // Function to give a warning when time runs out
     warnings++; // Increases the number of warnings
     alert(`Warning ${warnings}: You are not meeting the deadlines!`); // Displays the warning alert
 
-    if (warnings >= 3) { // If three warnings are given
+    if (warnings == 3) { // If three warnings are given
         showGameOverScreen(); // Show the game over screen
     } else {
         if(activegameID) {
