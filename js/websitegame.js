@@ -110,7 +110,6 @@ function startNextJob() { // Function to start the next job
     } else { // For all other jobs
         $('#game').html(`
         <h2>Job ${level}: ${jobName}</h2>
-        <p>Money: $${money}</p>
         <p>Time left: <span id="timeLeft">3</span> seconds</p>
         <button id="complete-task-button">Complete Task</button>
         `); // Displays the job details
@@ -193,7 +192,7 @@ function startEmailGame(moneyEarned) {
             return;
         }
 
-        if (message.length < 100 || !message.includes("I will try my best")) {
+        if (message.length < 25 || !message.includes("I will try my best")) {
             bossMessage.show();
             return;
         } else {
