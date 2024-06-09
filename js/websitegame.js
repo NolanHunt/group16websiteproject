@@ -110,7 +110,6 @@ function startNextJob() { // Function to start the next job
     } else { // For all other jobs
         $('#game').html(`
         <h2>Job ${level}: ${jobName}</h2>
-        <p>Money: $${money}</p>
         <p>Time left: <span id="timeLeft">3</span> seconds</p>
         <button id="complete-task-button">Complete Task</button>
         <img src="img/clearcomputer.png" id="computer-image" width = "70">
@@ -123,9 +122,12 @@ function startNextJob() { // Function to start the next job
         }); // Animates the progress bar
 
 
+<<<<<<< HEAD
         setTimeout(() => {
             gameOver(); // Ends the game after 20 seconds
         }, 20000);
+=======
+>>>>>>> ec359bf7750b04f24afb519fdc588899c4245ac7
 
         $('#complete-task-button').click(function() {
             completeTask(moneyEarned); // Completes the task when the complete task button is clicked
@@ -199,7 +201,7 @@ function startEmailGame(moneyEarned) {
             return;
         }
 
-        if (message.length < 100 || !message.includes("I will try my best")) {
+        if (message.length < 25 || !message.includes("I will try my best")) {
             bossMessage.show();
             return;
         } else {
@@ -248,12 +250,12 @@ function startSmallTalkGame(moneyEarned) {
     $('#talkButton').click(function() {
       giveWarning(); // Give a warning notification from the boss
       $('#smallTalkGame').hide(); // Hide the Small Talk mini-game
-      startNextJob(); // Proceed to the next game
+
     });
 
     $('#ignoreButton').click(function() {
       $('#smallTalkGame').hide(); // Hide the Small Talk mini-game
-      setTimeout(startNextJob); // Proceed to the next game
+      startNextJob(); // Proceed to the next game
     });
 }
 
@@ -274,7 +276,7 @@ function startBossConversationGame(moneyEarned) {
     $('#bossIgnoreButton').click(function() {
         $('#bossConversationGame').hide(); // Hide the boss conversation mini-game
         giveWarning(); // Give a warning notification from the boss
-        setTimeout(startNextJob); // Proceed to the next game after 2 seconds
+        
     });
 }
   
@@ -399,15 +401,6 @@ function checkGoalsCompletion() {
     }
 }
 
-function gameOver() { // Function to end the game
-    $('#game').html(`
-    <img src="img/gameover.jpg" alt="Game Over Image" width="1000">
-    <button id="restart-button">Restart</button>
-    `); // Displays the game over message
-    $('#restart-button').click(function() {
-        location.reload(); // Reloads the page
-    });
-}
 
 function startMeeting() {
     document.getElementById('story').innerText = "The meeting has started. Your boss is talking about the company's quarterly performance.";
