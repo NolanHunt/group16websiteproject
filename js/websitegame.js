@@ -133,7 +133,8 @@ function startCoffeeGame(moneyEarned) {
   
       // Make coffee draggable
       $('#coffee').draggable({
-          revert: true
+          revert: true,
+          revertDuration: 0
       });
   
       // Make people droppable
@@ -143,6 +144,10 @@ function startCoffeeGame(moneyEarned) {
               score++;
               $('#score').text(`Score: ${score}`);
               alert(`Delivered coffee to ${$(this).attr('id')}!`);
+
+              if(score>= 3) {
+                startNextJob(); // Start next game
+              }
           }
       });
 }
@@ -158,6 +163,22 @@ function startEmailGame(moneyEarned) {
     hideAllGames(); // should hide other games to prevent overlap
     $('#game').hide(); // Hides the main game
     $('#emailGame').show(); // Shows the email game
+
+    let emailsSent = 0;
+    let gameEnded = false;
+
+    const endEmailGame = () => {
+        console.log("ending email game");
+        if(!gameEnded) {
+            gameEnded = true;
+            console.log("game ended flag set to true");
+            giveWarning();
+            startNextGame();
+        }
+    }; //Function to end game
+
+    const timeoutID = setTimeout(endEmailGame, 20000); //Makes email game end after 20 seconds
+
     $('#send-button').off('click').on('click', function() {
         const recipient = $('#recipient').val();
         const message = $('#message').val();
@@ -179,11 +200,16 @@ function startEmailGame(moneyEarned) {
         const logItem = $('<li></li>').text(`Email sent to ${recipient}: "${message}"`);
         logList.append(logItem);
 
+        emailsSent++;
+
         $('#message').val(''); // Clear the message box
 
+        if(emailsSent >=3) {
+        clearTimeout(timeoutID);
         $('#emailGame').hide(); // Hides the email game
         $('#game').show(); // Shows the main game
         completeTask(moneyEarned); // Completes the task and updates the game state
+        }
     });
 }
 
@@ -192,14 +218,14 @@ function startSmallTalkGame(moneyEarned) {
     $('#game').hide(); // Hides the main game
     $('#smallTalkGame').show(); // Shows the small talk game
 
-    var options = [
+    let options = [
       "Alice has approached your cubicle to talk about her nephew's upcoming clarinet recital. What do you want to do?",
       "Bob has approached you on your lunch break to talk about golf. His breath smells like tuna. What do you want to do?",
       "Charlie has approached you in the lobby to invite you to a 3D printing convention. What do you want to do?",
       "Dana has approached you in the hallway to talk politics. She thinks that Bush is still president. What do you want to do?"
     ];
 
-    var randomIndex = Math.floor(Math.random() * options.length);
+    let randomIndex = Math.floor(Math.random() * options.length);
     $('#smallTalkText').text(options[randomIndex]);
 
     $('#talkButton').click(function() {
@@ -210,7 +236,7 @@ function startSmallTalkGame(moneyEarned) {
 
     $('#ignoreButton').click(function() {
       $('#smallTalkGame').hide(); // Hide the Small Talk mini-game
-      startNextJob(); // Proceed to the next game
+      setTimeout(startNextJob, 2000); // Proceed to the next game
     });
 }
 
@@ -264,14 +290,18 @@ function giveWarning() { // Function to give a warning when time runs out
     if (warnings >= 3) { // If three warnings are given
         showGameOverScreen(); // Show the game over screen
     } else {
+        if(activegameID) {
+            $('#${activeGameID}').hide(); //Hides the active game
+        }
         startNextJob(); // Starts the next job
     }
 }
 
 function showGameOverScreen() { // Function to show the Game Over screen
+    hideAllGames(); // Hide all games
     $('#game').html(`
     <div class="game-over show">
-    <img src="img/gameover.jpg" alt="Game Over Image" width="1000">
+    <img src="img/gameover.jpg" alt="Game Over Image" width="800">
     </div>
     `);
 
@@ -340,6 +370,7 @@ function zoneOut() {
     <button onclick="apologize()">Apologize and Refocus</button>
     <button onclick="makeExcuse()">Make an Excuse</button>
     `;
+    giveWarning(); // Calls warning for wrong choice
 }
 
 function apologize() {
@@ -352,6 +383,7 @@ function makeExcuse() {
     document.getElementById('story').innerText = "You try to make an excuse, but your boss is not convinced.";
     document.querySelector('.buttons').innerHTML = `<p>Outcome: Your boss is disappointed with your lack of professionalism.</p>`;
     endMeetingGame(50); // Least reward for making an excuse
+
 }
 
 function endMeetingGame(reward) {
