@@ -241,7 +241,7 @@ function startSmallTalkGame(moneyEarned) {
     $('#talkButton').click(function() {
       giveWarning(); // Give a warning notification from the boss
       $('#smallTalkGame').hide(); // Hide the Small Talk mini-game
-      startNextJob(); // Proceed to the next game
+
     });
 
     $('#ignoreButton').click(function() {
@@ -267,7 +267,7 @@ function startBossConversationGame(moneyEarned) {
     $('#bossIgnoreButton').click(function() {
         $('#bossConversationGame').hide(); // Hide the boss conversation mini-game
         giveWarning(); // Give a warning notification from the boss
-        setTimeout(startNextJob); // Proceed to the next game after 2 seconds
+        
     });
 }
   
