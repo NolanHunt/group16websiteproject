@@ -34,8 +34,8 @@ $(document).ready(function() { // Runs the function when the document is ready
         console.log("Start button clicked");
         if (!gameInProgress) { // Check if a game is already in progress
         startNextJob(); // Starts the next job when the start button is clicked
-        // $('.progress-bar-container').show(); // Show progress bar
-        inflationInterval = setInterval(applyInflation, 10000); // Apply inflation every 10 seconds after start
+        $('.progress-bar-container').show(); // Show progress bar
+        inflationInterval = setInterval(applyInflation, 30000); // Apply inflation every 30 seconds after start
         }
     });
 
@@ -119,9 +119,7 @@ function startNextJob() { // Function to start the next job
             giveWarning(); // Gives a warning if time runs out
         }); // Animates the progress bar
 
-        setTimeout(() => {
-            gameOver(); // Ends the game after 20 seconds
-        }, 20000);
+
 
         $('#complete-task-button').click(function() {
             completeTask(moneyEarned); // Completes the task when the complete task button is clicked
@@ -150,7 +148,9 @@ function startCoffeeGame(moneyEarned) {
               alert(`Delivered coffee to ${$(this).attr('id')}!`);
 
               if(score == 3) {
-                startNextJob(); // Start next game
+                score=0;
+                startNextJob();
+                // Start next game
               }
           }
       });
@@ -224,10 +224,6 @@ function startEmailGame(moneyEarned) {
     }
 }
 
-function startNextGame() {
-    console.log("Starting next game...");
-}
-
 function startSmallTalkGame(moneyEarned) {
     hideAllGames(); // should hide other games to prevent overlap
     $('#game').hide(); // Hides the main game
@@ -272,7 +268,7 @@ function startBossConversationGame(moneyEarned) {
     $('#bossIgnoreButton').click(function() {
         $('#bossConversationGame').hide(); // Hide the boss conversation mini-game
         giveWarning(); // Give a warning notification from the boss
-        setTimeout(startNextJob, 2000); // Proceed to the next game after 2 seconds
+        setTimeout(startNextJob); // Proceed to the next game after 2 seconds
     });
 }
   
@@ -285,7 +281,7 @@ function fetchRandomFact() {
       contentType: 'application/json',
       success: function(result) {
         console.log(result);
-        let bossConversation = "Your boss approached you. They say, '" + result[0].fact + "'. Let that motivate your work throughout the day.";
+        let bossConversation = "Your boss approaches you. They say, '" + result[0].fact + ". Let that motivate your work throughout the day.'";
         $('#bossConversationText').text(bossConversation);
       },
       error: function ajaxError(jqXHR) {
@@ -349,7 +345,7 @@ function giveWarning() { // Function to give a warning when time runs out
     warnings++; // Increases the number of warnings
     alert(`Warning ${warnings}: You are not meeting the deadlines!`); // Displays the warning alert
 
-    if (warnings >= 3) { // If three warnings are given
+    if (warnings == 3) { // If three warnings are given
         showGameOverScreen(); // Show the game over screen
     } else {
         if(activegameID) {
@@ -397,15 +393,6 @@ function checkGoalsCompletion() {
     }
 }
 
-function gameOver() { // Function to end the game
-    $('#game').html(`
-    <img src="img/gameover.jpg" alt="Game Over Image" width="1000">
-    <button id="restart-button">Restart</button>
-    `); // Displays the game over message
-    $('#restart-button').click(function() {
-        location.reload(); // Reloads the page
-    });
-}
 
 function startMeeting() {
     document.getElementById('story').innerText = "The meeting has started. Your boss is talking about the company's quarterly performance.";
