@@ -118,6 +118,7 @@ function startNextJob() { // Function to start the next job
         $('#complete-task-button').click(function() {
             $('#progressBar').stop(); // Stop the progress bar animation
             completeTask(moneyEarned); // Completes the task when the complete task button is clicked
+            $('#progressBar').css('width', '100%').stop()
         });
     }
 }
@@ -240,8 +241,9 @@ function startSmallTalkGame(moneyEarned) {
     $('#smallTalkText').text(options[randomIndex]);
 
     $('#talkButton').click(function() {
-      giveWarning(); // Give a warning notification from the boss
-      $('#smallTalkGame').hide(); // Hide the Small Talk mini-game
+        $('#smallTalkGame').hide();
+        giveWarning(); // Give a warning notification from the boss
+       // Hide the Small Talk mini-game
 
     });
 
