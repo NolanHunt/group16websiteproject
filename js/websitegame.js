@@ -246,7 +246,7 @@ function startSmallTalkGame(moneyEarned) {
 
     $('#ignoreButton').click(function() {
       $('#smallTalkGame').hide(); // Hide the Small Talk mini-game
-      setTimeout(startNextJob); // Proceed to the next game
+      startNextJob(); // Proceed to the next game
     });
 }
 
