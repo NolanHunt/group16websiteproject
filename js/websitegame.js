@@ -242,8 +242,9 @@ function startSmallTalkGame(moneyEarned) {
     $('#smallTalkText').text(options[randomIndex]);
 
     $('#talkButton').click(function() {
-      giveWarning(); // Give a warning notification from the boss
-      $('#smallTalkGame').hide(); // Hide the Small Talk mini-game
+        $('#smallTalkGame').hide();
+        giveWarning(); // Give a warning notification from the boss
+       // Hide the Small Talk mini-game
 
     });
 
