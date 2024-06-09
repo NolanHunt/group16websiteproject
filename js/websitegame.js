@@ -112,7 +112,10 @@ function startNextJob() { // Function to start the next job
         <h2>Job ${level}: ${jobName}</h2>
         <p>Time left: <span id="timeLeft">3</span> seconds</p>
         <button id="complete-task-button">Complete Task</button>
+        <img src="img/clearcomputer.png" id="computer-image" width = "70">
+        <img src="img/clearprinter.png" id="printer-image" width = "70">
         `); // Displays the job details
+
 
         $('#progressBar').css('width', '100%').stop().animate({ width: '0%' }, 3000, function() {
             giveWarning(); // Gives a warning if time runs out
@@ -242,7 +245,7 @@ function startSmallTalkGame(moneyEarned) {
     $('#talkButton').click(function() {
       giveWarning(); // Give a warning notification from the boss
       $('#smallTalkGame').hide(); // Hide the Small Talk mini-game
-      startNextJob(); // Proceed to the next game
+
     });
 
     $('#ignoreButton').click(function() {
@@ -268,7 +271,7 @@ function startBossConversationGame(moneyEarned) {
     $('#bossIgnoreButton').click(function() {
         $('#bossConversationGame').hide(); // Hide the boss conversation mini-game
         giveWarning(); // Give a warning notification from the boss
-        setTimeout(startNextJob); // Proceed to the next game after 2 seconds
+        
     });
 }
   
