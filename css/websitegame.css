@@ -213,7 +213,11 @@ button:hover:not(:disabled) {
 }
 
 #gameOverImage {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    position: absolute;
+    align-items: center;
+    top: 0;
+    left: 0;
 }

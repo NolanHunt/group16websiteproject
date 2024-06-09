@@ -26,13 +26,14 @@ const goals = [ // Array of goal objects with name and value properties
 let inflationInterval; // Declare inflationInterval
 
 let gameInProgress = false; // Initialize flag to track whether a game is in progress
+let activegameID = null; //Declare activegameID to track current active game
 
 $(document).ready(function() { // Runs the function when the document is ready
     $('#start-button').click(function() {
         console.log("Start button clicked");
         if (!gameInProgress) { // Check if a game is already in progress
         startNextJob(); // Starts the next job when the start button is clicked
-        $('.progress-bar-container').show(); // Show progress bar
+        // $('.progress-bar-container').show(); // Show progress bar
         inflationInterval = setInterval(applyInflation, 10000); // Apply inflation every 10 seconds after start
         }
     });
@@ -107,17 +108,17 @@ function startNextJob() { // Function to start the next job
         $('#game').html(`
         <h2>Job ${level}: ${jobName}</h2>
         <p>Money: $${money}</p>
-        <p>Time left: <span id="timeLeft">10</span> seconds</p>
+        <p>Time left: <span id="timeLeft">3</span> seconds</p>
         <button id="complete-task-button">Complete Task</button>
         `); // Displays the job details
 
-        $('#progressBar').css('width', '100%').stop().animate({ width: '0%' }, 10000, function() {
+        $('#progressBar').css('width', '100%').stop().animate({ width: '0%' }, 3000, function() {
             giveWarning(); // Gives a warning if time runs out
         }); // Animates the progress bar
 
         setTimeout(() => {
-            gameOver(); // Ends the game after 30 seconds
-        }, 30000);
+            gameOver(); // Ends the game after 20 seconds
+        }, 20000);
 
         $('#complete-task-button').click(function() {
             completeTask(moneyEarned); // Completes the task when the complete task button is clicked
@@ -145,7 +146,7 @@ function startCoffeeGame(moneyEarned) {
               $('#score').text(`Score: ${score}`);
               alert(`Delivered coffee to ${$(this).attr('id')}!`);
 
-              if(score>= 3) {
+              if(score == 3) {
                 startNextJob(); // Start next game
               }
           }
@@ -177,7 +178,7 @@ function startEmailGame(moneyEarned) {
         }
     }; //Function to end game
 
-    const timeoutID = setTimeout(endEmailGame, 20000); //Makes email game end after 20 seconds
+    const timeoutID = setTimeout(endEmailGame, 10000); //Makes email game end after 20 seconds
 
     $('#send-button').off('click').on('click', function() {
         const recipient = $('#recipient').val();
@@ -205,12 +206,23 @@ function startEmailGame(moneyEarned) {
         $('#message').val(''); // Clear the message box
 
         if(emailsSent >=3) {
-        clearTimeout(timeoutID);
-        $('#emailGame').hide(); // Hides the email game
-        $('#game').show(); // Shows the main game
-        completeTask(moneyEarned); // Completes the task and updates the game state
-        }
+            clearTimeout(timeoutID);
+            if (!gameEnded) {
+                gameEnded = true;
+            $('#emailGame').hide(); // Hides the email game
+            $('#game').show(); // Shows the main game
+            completeTask(moneyEarned); // Completes the task and updates the game state
+            startNextGame();
+            }
+        }  
     });
+    if (typeof startNextGame !== "function") {
+        console.error("startNextGame not defined");
+    }
+}
+
+function startNextGame() {
+    console.log("Starting next game...");
 }
 
 function startSmallTalkGame(moneyEarned) {
@@ -236,7 +248,7 @@ function startSmallTalkGame(moneyEarned) {
 
     $('#ignoreButton').click(function() {
       $('#smallTalkGame').hide(); // Hide the Small Talk mini-game
-      setTimeout(startNextJob, 2000); // Proceed to the next game
+      setTimeout(startNextJob); // Proceed to the next game
     });
 }
 
@@ -283,6 +295,14 @@ function hideAllGames() {
     $('#coffeeGame, #meetingGame, #emailGame, #smallTalkGame').hide(); // Hide all game elements
 }
 
+function hideTitle() {
+    $(".game-container").hide(); // Hide Corporate Climber title
+}
+
+function hideHouse() {
+    $("#houseContainer").hide(); // Hide house container
+}
+
 function giveWarning() { // Function to give a warning when time runs out
     warnings++; // Increases the number of warnings
     alert(`Warning ${warnings}: You are not meeting the deadlines!`); // Displays the warning alert
@@ -299,6 +319,8 @@ function giveWarning() { // Function to give a warning when time runs out
 
 function showGameOverScreen() { // Function to show the Game Over screen
     hideAllGames(); // Hide all games
+    hideTitle(); // Hide title
+    hideHouse(); // Hide house column
     $('#game').html(`
     <div class="game-over show">
     <img src="img/gameover.jpg" alt="Game Over Image" width="800">
