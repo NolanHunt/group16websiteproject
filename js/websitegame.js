@@ -116,6 +116,7 @@ function startNextJob() { // Function to start the next job
 
 
         $('#complete-task-button').click(function() {
+            $('#progressBar').stop(); // Stop the progress bar animation
             completeTask(moneyEarned); // Completes the task when the complete task button is clicked
         });
     }
@@ -124,6 +125,7 @@ function startNextJob() { // Function to start the next job
 function startCoffeeGame(moneyEarned) {
     hideAllGames(); // Hides other games to prevent overlap
     $('#game').hide(); // Hides the main game
+    $('#progressBar').hide(); // Hides the progress bar
     $('#coffeeGame').show(); // Shows the coffee game
     let score = 0;
   
@@ -154,12 +156,14 @@ function startMeetingGame(moneyEarned) { // Function to start the meeting game
     hideAllGames(); // should hide other games to prevent overlap
     resetMeetingGame(); // Reset the meeting game state
     $('#game').hide(); // Hides the main game
+    $('#progressBar').hide(); // Hides the progress bar
     $('#meetingGame').show(); // Shows the meeting game
 }
 
 function startEmailGame(moneyEarned) {
     hideAllGames(); // should hide other games to prevent overlap
     $('#game').hide(); // Hides the main game
+    $('#progressBar').hide(); // Hides the progress bar
     $('#emailGame').show(); // Shows the email game
 
     let emailsSent = 0;
@@ -222,6 +226,7 @@ function startEmailGame(moneyEarned) {
 function startSmallTalkGame(moneyEarned) {
     hideAllGames(); // should hide other games to prevent overlap
     $('#game').hide(); // Hides the main game
+    $('#progressBar').hide(); // Hides the progress bar
     $('#smallTalkGame').show(); // Shows the small talk game
 
     let options = [
@@ -250,6 +255,7 @@ function startSmallTalkGame(moneyEarned) {
 function startBossConversationGame(moneyEarned) {
     hideAllGames(); // should hide other games to prevent overlap
     $('#game').hide(); // Hides the main game
+    $('#progressBar').hide(); // Hides the progress bar
     $('#bossConversationGame').show(); // Shows the boss conversation game
     fetchRandomFact();
 
