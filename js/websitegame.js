@@ -106,8 +106,6 @@ function startNextJob() { // Function to start the next job
         <p>Money: $${money}</p>
         <button id="complete-task-button">Complete Task</button>
         <button id="ignore-task-button">Ignore. Check Phone</button>
-        <img src="img/clearcomputer.png" id="computer-image" width="100">
-        <img src="img/clearprinter.png" id="printer-image" width="100">
         `); // Displays the job details
 
         $('#complete-task-button').click(function() {
