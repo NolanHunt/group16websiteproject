@@ -89,13 +89,6 @@ function startNextJob() { // Function to start the next job
     const jobName = jobs[randomJobIndex]; // Gets the name of the selected job
     const moneyEarned = moneyEarnedPerJob[randomJobIndex]; // Gets the money earned for the selected job
 
-    jobCount++; // Increment the job count
-
-    if (jobCount > 5) { // Reset progress bar after 5 jobs
-        jobCount = 1; // Reset job count
-        $('#progressBar').stop().css('width', '100%'); // Reset progress bar width
-    }
-
     if (jobName === "Deliver the coffees") { // If the selected job is "Deliver the coffees"
         startCoffeeGame(moneyEarned); // Starts the coffee game
     } else if (jobName === "Sitting in meetings and talking") { // If the selected job is "Sitting in meetings and talking"
@@ -122,9 +115,7 @@ function startNextJob() { // Function to start the next job
         }); // Animates the progress bar
 
 
-        setTimeout(() => {
-            gameOver(); // Ends the game after 20 seconds
-        }, 20000);
+
 
         $('#complete-task-button').click(function() {
             $('#progressBar').stop(); // Stop the progress bar animation
