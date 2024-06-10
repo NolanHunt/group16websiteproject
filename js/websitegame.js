@@ -33,7 +33,6 @@ $(document).ready(function() { // Runs the function when the document is ready
         console.log("Start button clicked");
         if (!gameInProgress) { // Check if a game is already in progress
         startNextJob(); // Starts the next job when the start button is clicked
-        $('.progress-bar-container').show(); // Show progress bar
         inflationInterval = setInterval(applyInflation, 30000); // Apply inflation every 30 seconds after start
         }
     });
@@ -109,9 +108,11 @@ function startNextJob() { // Function to start the next job
         <img src="img/clearprinter.png" id="printer-image" width="100">
         `); // Displays the job details
 
-
+        $('.progress-bar-container').show(); // Show progress bar
         $('#progressBar').css('width', '100%').stop().animate({ width: '0%' }, 3000, function() {
-            giveWarning(); // Gives a warning if time runs out
+            giveWarning();
+            $('#progressBar').css('width', '100%').stop();
+            $('#progressBar').stop(); // Gives a warning if time runs out
         }); // Animates the progress bar
 
 
@@ -178,7 +179,6 @@ function startEmailGame(moneyEarned) {
             gameEnded = true;
             console.log("game ended flag set to true");
             giveWarning();
-            startNextGame();
         }
     }; //Function to end game
 
@@ -216,13 +216,10 @@ function startEmailGame(moneyEarned) {
             $('#emailGame').hide(); // Hides the email game
             $('#game').show(); // Shows the main game
             completeTask(moneyEarned); // Completes the task and updates the game state
-            startNextGame();
+            startNextJob();
             }
         }  
     });
-    if (typeof startNextGame !== "function") {
-        console.error("startNextGame not defined");
-    }
 }
 
 function startSmallTalkGame(moneyEarned) {
@@ -242,18 +239,14 @@ function startSmallTalkGame(moneyEarned) {
     $('#smallTalkText').text(options[randomIndex]);
 
     $('#talkButton').click(function() {
-      giveWarning(); // Give a warning notification from the boss
       $('#smallTalkGame').hide(); // Hide the Small Talk mini-game
-      startNextJob(); // Proceed to the next game
-        $('#smallTalkGame').hide();
         giveWarning(); // Give a warning notification from the boss
-       // Hide the Small Talk mini-game
 
     });
 
     $('#ignoreButton').click(function() {
       $('#smallTalkGame').hide(); // Hide the Small Talk mini-game
-      setTimeout(startNextJob); // Proceed to the next game
+      startNextJob();
     });
 }
 
@@ -275,7 +268,6 @@ function startBossConversationGame(moneyEarned) {
     $('#bossIgnoreButton').click(function() {
         $('#bossConversationGame').hide(); // Hide the boss conversation mini-game
         giveWarning(); // Give a warning notification from the boss
-        setTimeout(startNextJob); // Proceed to the next game after 2 seconds
     });
 }
   
