@@ -141,7 +141,6 @@ function startCoffeeGame(moneyEarned) {
 
               if(score == 3) {
                 startNextJob();
-                score=0;
                 // Start next game
               }
           }
