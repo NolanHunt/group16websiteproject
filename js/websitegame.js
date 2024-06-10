@@ -83,6 +83,7 @@ function createConfetti() { // Function to create confetti animation
 
 
 function startNextJob() { // Function to start the next job
+    $('.progress-bar-container').hide();
     gameInProgress = true; // Set game in progress flag to true- should stop games running at the same time
     
     const randomJobIndex = Math.floor(Math.random() * jobs.length); // Randomly selects a job
@@ -215,7 +216,6 @@ function startEmailGame(moneyEarned) {
             if (!gameEnded) {
                 gameEnded = true;
             $('#emailGame').hide(); // Hides the email game
-            $('#game').show(); // Shows the main game
             completeTask(moneyEarned); // Completes the task and updates the game state
             startNextJob();
             }
@@ -448,8 +448,7 @@ function makeExcuse() {
 
 function endMeetingGame(reward) {
     setTimeout(() => {
-        hideMeetingGame(); // Hide the meeting game
-        $('#game').show(); // Show the main game
+        $('#meetingGame').hide(); // Hide the meeting game
         completeTask(reward); // Example reward for completing the meeting
         startNextJob(); // Proceed to the next job after the meeting game ends
     }, 3000);
@@ -460,11 +459,6 @@ function resetMeetingGame() {
     document.querySelector('.buttons').innerHTML = `
     <button onclick="startMeeting()">Start Meeting</button>
     `;
-}
-
-function hideMeetingGame() {
-    $('#meetingGame').hide();
-    $('#game').show();
 }
 
 function applyInflation() {
