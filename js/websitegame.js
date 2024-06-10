@@ -106,8 +106,6 @@ function startNextJob() { // Function to start the next job
         <p>Money: $${money}</p>
         <p>Time left: <span id="timeLeft">3</span> seconds</p>
         <button id="complete-task-button">Complete Task</button>
-        <img src="img/clearcomputer.png" id="computer-image" width="100">
-        <img src="img/clearprinter.png" id="printer-image" width="100">
         `); // Displays the job details
 
         $('.progress-bar-container').show(); // Show progress bar
