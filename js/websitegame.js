@@ -83,7 +83,7 @@ function createConfetti() { // Function to create confetti animation
 
 
 function startNextJob() { // Function to start the next job
-    $('.progress-bar-container').hide();
+    
     gameInProgress = true; // Set game in progress flag to true- should stop games running at the same time
     
     const randomJobIndex = Math.floor(Math.random() * jobs.length); // Randomly selects a job
@@ -106,25 +106,18 @@ function startNextJob() { // Function to start the next job
         <p>Money: $${money}</p>
         <p>Time left: <span id="timeLeft">3</span> seconds</p>
         <button id="complete-task-button">Complete Task</button>
+        <button id="ignore-task-button">Ignore. Check Phone</button>
         <img src="img/clearcomputer.png" id="computer-image" width="100">
         <img src="img/clearprinter.png" id="printer-image" width="100">
         `); // Displays the job details
 
-        $('.progress-bar-container').show(); // Show progress bar
-        $('#progressBar').css('width', '100%').stop().animate({ width: '0%' }, 3000, function() {
-            giveWarning();
-            $('#progressBar').css('width', '100%').stop();
-            $('#progressBar').stop(); // Gives a warning if time runs out
-        }); // Animates the progress bar
-
-
-
-
         $('#complete-task-button').click(function() {
-            $('#progressBar').stop(); // Stop the progress bar animation
             completeTask(moneyEarned); // Completes the task when the complete task button is clicked
-            $('#progressBar').css('width', '100%').stop()
+            startNextJob();
         });
+        $('#ignore-task-button').click(function(){
+            giveWarning();
+        })
     }
 }
 
