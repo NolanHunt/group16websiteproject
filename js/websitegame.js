@@ -31,6 +31,7 @@ let activegameID = null; //Declare activegameID to track current active game
 $(document).ready(function() { // Runs the function when the document is ready
     $('#start-button').click(function() {
         console.log("Start button clicked");
+        $('.progress-bar-container').hide();
         if (!gameInProgress) { // Check if a game is already in progress
         startNextJob(); // Starts the next job when the start button is clicked
         inflationInterval = setInterval(applyInflation, 30000); // Apply inflation every 30 seconds after start
@@ -148,8 +149,8 @@ function startCoffeeGame(moneyEarned) {
               alert(`Delivered coffee to ${$(this).attr('id')}!`);
 
               if(score == 3) {
-                score=0;
                 startNextJob();
+                score=0;
                 // Start next game
               }
           }
@@ -194,7 +195,7 @@ function startEmailGame(moneyEarned) {
             return;
         }
 
-        if (message.length < 100 || !message.includes("I will try my best")) {
+        if (message.length < 25 || !message.includes("I will try my best")) {
             bossMessage.show();
             return;
         } else {
@@ -209,7 +210,7 @@ function startEmailGame(moneyEarned) {
 
         $('#message').val(''); // Clear the message box
 
-        if(emailsSent >=3) {
+        if(emailsSent >= 1) {
             clearTimeout(timeoutID);
             if (!gameEnded) {
                 gameEnded = true;
