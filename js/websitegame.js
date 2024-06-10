@@ -201,7 +201,7 @@ function startEmailGame(moneyEarned) {
 
         $('#message').val(''); // Clear the message box
 
-        if(emailsSent >= 1) {
+        if(emailsSent == 2) {
             clearTimeout(timeoutID);
             if (!gameEnded) {
                 gameEnded = true; 
