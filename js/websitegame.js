@@ -206,8 +206,7 @@ function startEmailGame(moneyEarned) {
         if(emailsSent >= 1) {
             clearTimeout(timeoutID);
             if (!gameEnded) {
-                gameEnded = true;
-            $('#emailGame').hide(); // Hides the email game
+                gameEnded = true; 
             completeTask(moneyEarned); // Completes the task and updates the game state
             startNextJob();
             }
@@ -232,13 +231,13 @@ function startSmallTalkGame(moneyEarned) {
     $('#smallTalkText').text(options[randomIndex]);
 
     $('#talkButton').click(function() {
-      $('#smallTalkGame').hide(); // Hide the Small Talk mini-game
+      
         giveWarning(); // Give a warning notification from the boss
 
     });
 
     $('#ignoreButton').click(function() {
-      $('#smallTalkGame').hide(); // Hide the Small Talk mini-game
+      
       startNextJob();
     });
 }
@@ -253,13 +252,13 @@ function startBossConversationGame(moneyEarned) {
 
     // Event listener for the nod button
     $('#nodButton').click(function() {
-        $('#bossConversationGame').hide(); // Hide the boss conversation mini-game
+        
         startNextJob(); // Proceed to the next game
     });
   
   // Event listener for the ignore button
     $('#bossIgnoreButton').click(function() {
-        $('#bossConversationGame').hide(); // Hide the boss conversation mini-game
+        
         giveWarning(); // Give a warning notification from the boss
     });
 }
