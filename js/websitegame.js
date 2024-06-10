@@ -89,6 +89,13 @@ function startNextJob() { // Function to start the next job
     const jobName = jobs[randomJobIndex]; // Gets the name of the selected job
     const moneyEarned = moneyEarnedPerJob[randomJobIndex]; // Gets the money earned for the selected job
 
+    jobCount++; // Increment the job count
+
+    if (jobCount > 5) { // Reset progress bar after 5 jobs
+        jobCount = 1; // Reset job count
+        $('#progressBar').stop().css('width', '100%'); // Reset progress bar width
+    }
+
     if (jobName === "Deliver the coffees") { // If the selected job is "Deliver the coffees"
         startCoffeeGame(moneyEarned); // Starts the coffee game
     } else if (jobName === "Sitting in meetings and talking") { // If the selected job is "Sitting in meetings and talking"
@@ -102,10 +109,11 @@ function startNextJob() { // Function to start the next job
     } else { // For all other jobs
         $('#game').html(`
         <h2>Job ${level}: ${jobName}</h2>
+        <p>Money: $${money}</p>
         <p>Time left: <span id="timeLeft">3</span> seconds</p>
         <button id="complete-task-button">Complete Task</button>
-        <img src="img/clearcomputer.png" id="computer-image" width = "70">
-        <img src="img/clearprinter.png" id="printer-image" width = "70">
+        <img src="img/clearcomputer.png" id="computer-image" width="100">
+        <img src="img/clearprinter.png" id="printer-image" width="100">
         `); // Displays the job details
 
 
@@ -114,6 +122,9 @@ function startNextJob() { // Function to start the next job
         }); // Animates the progress bar
 
 
+        setTimeout(() => {
+            gameOver(); // Ends the game after 20 seconds
+        }, 20000);
 
         $('#complete-task-button').click(function() {
             completeTask(moneyEarned); // Completes the task when the complete task button is clicked
@@ -167,7 +178,7 @@ function startEmailGame(moneyEarned) {
 
     const endEmailGame = () => {
         console.log("ending email game");
-        if (!gameEnded) {
+        if(!gameEnded) {
             gameEnded = true;
             console.log("game ended flag set to true");
             giveWarning();
@@ -175,9 +186,10 @@ function startEmailGame(moneyEarned) {
         }
     }; //Function to end game
 
-    const timeoutID = setTimeout(endEmailGame, 30000); //Makes email game end after 30 seconds
+    const timeoutID = setTimeout(endEmailGame, 10000); //Makes email game end after 20 seconds
 
     $('#send-button').off('click').on('click', function() {
+        const recipient = $('#recipient').val();
         const message = $('#message').val();
         const bossMessage = $('#boss-message');
 
@@ -186,7 +198,7 @@ function startEmailGame(moneyEarned) {
             return;
         }
 
-        if (message.length < 25 || !message.includes("I will try my best")) {
+        if (message.length < 100 || !message.includes("I will try my best")) {
             bossMessage.show();
             return;
         } else {
@@ -194,30 +206,28 @@ function startEmailGame(moneyEarned) {
         }
 
         const logList = $('#log-list');
-        const logItem = $('<li></li>').text(`Email sent: "${message}"`);
+        const logItem = $('<li></li>').text(`Email sent to ${recipient}: "${message}"`);
         logList.append(logItem);
 
         emailsSent++;
 
         $('#message').val(''); // Clear the message box
 
-        if (emailsSent >= 1) {
+        if(emailsSent >=3) {
             clearTimeout(timeoutID);
             if (!gameEnded) {
                 gameEnded = true;
-                $('#emailGame').hide(); // Hides the email game
-                $('#game').show(); // Shows the main game
-                completeTask(moneyEarned); // Completes the task and updates the game state
-                startNextGame();
+            $('#emailGame').hide(); // Hides the email game
+            $('#game').show(); // Shows the main game
+            completeTask(moneyEarned); // Completes the task and updates the game state
+            startNextGame();
             }
-        }
+        }  
     });
-
     if (typeof startNextGame !== "function") {
         console.error("startNextGame not defined");
     }
 }
-
 
 function startSmallTalkGame(moneyEarned) {
     hideAllGames(); // should hide other games to prevent overlap
@@ -237,12 +247,12 @@ function startSmallTalkGame(moneyEarned) {
     $('#talkButton').click(function() {
       giveWarning(); // Give a warning notification from the boss
       $('#smallTalkGame').hide(); // Hide the Small Talk mini-game
-
+      startNextJob(); // Proceed to the next game
     });
 
     $('#ignoreButton').click(function() {
       $('#smallTalkGame').hide(); // Hide the Small Talk mini-game
-      startNextJob(); // Proceed to the next game
+      setTimeout(startNextJob); // Proceed to the next game
     });
 }
 
@@ -263,7 +273,7 @@ function startBossConversationGame(moneyEarned) {
     $('#bossIgnoreButton').click(function() {
         $('#bossConversationGame').hide(); // Hide the boss conversation mini-game
         giveWarning(); // Give a warning notification from the boss
-        
+        setTimeout(startNextJob); // Proceed to the next game after 2 seconds
     });
 }
   
@@ -388,6 +398,15 @@ function checkGoalsCompletion() {
     }
 }
 
+function gameOver() { // Function to end the game
+    $('#game').html(`
+    <img src="img/gameover.jpg" alt="Game Over Image" width="1000">
+    <button id="restart-button">Restart</button>
+    `); // Displays the game over message
+    $('#restart-button').click(function() {
+        location.reload(); // Reloads the page
+    });
+}
 
 function startMeeting() {
     document.getElementById('story').innerText = "The meeting has started. Your boss is talking about the company's quarterly performance.";
