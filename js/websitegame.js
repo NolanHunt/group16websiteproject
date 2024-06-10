@@ -104,7 +104,6 @@ function startNextJob() { // Function to start the next job
         $('#game').html(`
         <h2>Job ${level}: ${jobName}</h2>
         <p>Money: $${money}</p>
-        <p>Time left: <span id="timeLeft">3</span> seconds</p>
         <button id="complete-task-button">Complete Task</button>
         <button id="ignore-task-button">Ignore. Check Phone</button>
         <img src="img/clearcomputer.png" id="computer-image" width="100">
